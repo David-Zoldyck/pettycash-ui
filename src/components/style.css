@@ -1,0 +1,22 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  /* align-items: center; */
+  /* align-content: center; */
+}
+
+.minorbuttons {
+  display: flex;
+  flex-direction: row;
+}
+
+.itemform {
+  padding: 5px;
+}
+
+/* @media print {
+  .printbutton {
+    display: hidden;
+  }
+} */
