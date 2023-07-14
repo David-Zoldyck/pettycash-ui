@@ -1,7 +1,28 @@
-import { useState } from "react";
-import logo from "../assets/Cyberbytelogo.jpeg";
+import logo from "../components/assets/Cyberbytelogo.jpeg";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-export default function Display({ form, total, onReturn }) {
+export default function ViewPettyCashRequest() {
+  const { id } = useParams();
+  const [form, setForm] = useState({});
+  const navigate = useNavigate();
+
+  const fetchForm = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/get-request/${id}`
+      );
+
+      setForm(response.data);
+    } catch (error) {
+      console.log(error);
+      alert("Failed to fetch request");
+    }
+  };
+  useEffect(() => {
+    fetchForm();
+  }, [id]);
+
   const formatCurrency = (value) => {
     return Intl.NumberFormat("en-NG", {
       style: "currency",
@@ -10,7 +31,7 @@ export default function Display({ form, total, onReturn }) {
   };
 
   if (!form) {
-    return <div>No form data to display</div>;
+    return <div>Petty Cash Request not found.</div>;
   }
 
   return (
@@ -20,7 +41,8 @@ export default function Display({ form, total, onReturn }) {
       </header>
       <div className="container mx-auto p-4 max-w-2xl bg-white">
         <h2 className="text-2xl font-bold text-center mb-6">
-          Your petty cash request has been submitted!
+          {/* todo: personalize this */}
+          Petty Cash Request
         </h2>
         <div className="mb-8">
           <h3 className="text-lg font-bold mb-2">Personal Information</h3>
@@ -45,12 +67,12 @@ export default function Display({ form, total, onReturn }) {
           </p>
           <p>
             <strong>Recipient Bank: </strong>
-            {form.accountDetails.bank_name}
+            {form.accountDetails.bank}
           </p>
         </div>
         <div className="mb-8">
           <h3 className="text-lg font-bold mb-2">Details/Items</h3>
-          {form.items.length && (
+          {form.items?.length && (
             <>
               <table className="w-full">
                 <thead>
@@ -75,7 +97,7 @@ export default function Display({ form, total, onReturn }) {
                     <td className="px-4 py-2 border"></td>
                     <td className="px-4 py-2 border">Total</td>
                     <td className="px-4 py-2 border">
-                      {formatCurrency(total)}
+                      {formatCurrency(form.total)}
                     </td>
                   </tr>
                 </tbody>
@@ -101,7 +123,7 @@ export default function Display({ form, total, onReturn }) {
           </div>
           <div>
             <button
-              onClick={onReturn}
+              onClick={() => navigate("/show-requests")}
               className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded w-full sm:w-auto mt-4 sm:mt-0 print:hidden"
             >
               Return

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import logo from "./assets/Cyberbytelogo(2).jpeg";
+import logo from "./assets/Cyberbytelogo.jpeg";
 import "./style.css";
 
 export default function PetiCashForm({

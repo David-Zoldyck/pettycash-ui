@@ -3,7 +3,7 @@ import PetiCashForm from "./components/form.jsx";
 import Display from "./components/displaypage/display.jsx";
 import { Link, Route, Routes } from "react-router-dom";
 import { Home } from "./pages/Home.jsx";
-import logo from "../src/components/assets/Cyberbytelogo(2).jpeg";
+import logo from "../src/components/assets/Cyberbytelogo.jpeg";
 
 function App() {
   return (
@@ -16,7 +16,6 @@ function App() {
                 to="/"
                 className="text-orange-100 hover:text-white transition duration-300"
               >
-                
                 Home
               </Link>
             </li>
@@ -34,6 +33,22 @@ function App() {
                 className="text-orange-100 hover:text-white transition duration-300"
               >
                 View Submitted Forms
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/create-account"
+                className="text-orange-100 hover:text-white transition duration-300"
+              >
+                Create User
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/login"
+                className="text-orange-100 hover:text-white transition duration-300"
+              >
+                Login
               </Link>
             </li>
           </ul>
