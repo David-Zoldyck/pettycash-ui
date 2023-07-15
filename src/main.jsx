@@ -6,6 +6,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { PettyCashForm } from "./pages/PettyCashForm.jsx";
 import { ViewPettyCashForm } from "./pages/ViewPettyCashForm.jsx";
 import ViewRequest from "./pages/ViewForm.jsx";
+import CreateUser from "./pages/CreateUser.jsx";
+import Login from "./pages/Login.jsx";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +29,14 @@ const router = createBrowserRouter([
   {
     path: "/show-requests/:id",
     element: <ViewRequest />,
+  },
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "/create-account",
+    element: <CreateUser />,
   },
 ]);
 

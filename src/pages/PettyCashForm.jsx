@@ -29,12 +29,20 @@ export function PettyCashForm() {
 
   const onSubmit = async (data) => {
     try {
-      const response = await fetch("http://localhost:3000/register", {
+      // Calculate the total amount
+      const total = data.items.reduce(
+        (accumulator, item) => accumulator + parseInt(item.amount),
+        0
+      );
+      // console.log("Total:", total);
+      setTotal(total);
+
+      const response = await fetch("http://localhost:3000/create-request", {
         method: "POST",
         headers: {
           "Content-type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, total }),
       });
 
       console.log(data);
@@ -43,20 +51,10 @@ export function PettyCashForm() {
     } catch (e) {
       console.error(e);
     }
-
-    // Calculate the total amount
-    const total = data.items.reduce(
-      (accumulator, item) => accumulator + parseInt(item.amount),
-      0
-    );
-    console.log("Total:", total);
-
-    setTotal(total);
   };
 
   return (
     <>
-    
       <nav className="bg-orange-600 py-4">
         <div className="container mx-auto flex items-center justify-between px-4">
           <ul className="flex space-x-4">

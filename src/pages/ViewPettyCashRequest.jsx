@@ -72,7 +72,7 @@ export default function ViewPettyCashRequest() {
         </div>
         <div className="mb-8">
           <h3 className="text-lg font-bold mb-2">Details/Items</h3>
-          {form.items?.length && (
+          {form.items.length && (
             <>
               <table className="w-full">
                 <thead>
@@ -84,7 +84,7 @@ export default function ViewPettyCashRequest() {
                 </thead>
                 <tbody>
                   {form.items.map((item, index) => (
-                    <tr onDoubleClick={() => removeItem(index)} key={index}>
+                    <tr key={index}>
                       <td className="px-4 py-2 border"> {index + 1}</td>
                       <td className="px-4 py-2 border"> {item.name}</td>
                       <td className="px-4 py-2 border">
