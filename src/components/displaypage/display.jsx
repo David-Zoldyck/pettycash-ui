@@ -2,6 +2,7 @@ import { useState } from "react";
 import logo from "../assets/Cyberbytelogo.jpeg";
 
 export default function Display({ form, total, onReturn }) {
+  console.log(form);
   const formatCurrency = (value) => {
     return Intl.NumberFormat("en-NG", {
       style: "currency",
@@ -28,13 +29,15 @@ export default function Display({ form, total, onReturn }) {
             <strong>Name: </strong> {form.name}
           </p>
           <p>
-            <strong>Date: </strong>
+            <strong>Date of Expense: </strong>
             {form.date}
           </p>
         </div>
 
         <div className="mb-8">
-          <h3 className="text-lg font-bold mb-2">Account Details</h3>
+          <h3 className="text-lg font-bold mb-2">
+            Beneficiary Account Details
+          </h3>
           <p>
             <strong>Account Number: </strong>
             {form.accountDetails.number}
@@ -88,7 +91,7 @@ export default function Display({ form, total, onReturn }) {
           {form.authorizedBy}
         </p>
         <p>
-          <strong>Signature: </strong>
+          <strong>Approved By: </strong>
         </p>
         <div className="flex justify-between">
           <div>

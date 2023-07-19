@@ -95,7 +95,7 @@ export default function PetiCashForm({
           />
         </div>
         <div className="mb-4">
-          <label className="font-bold text-orange-500">Date: </label>
+          <label className="font-bold text-orange-500">Date of Expense: </label>
           <input
             type="date"
             required
@@ -106,7 +106,9 @@ export default function PetiCashForm({
         </div>
         <div className="mb-4">
           <div>
-            <p className="text-xl text-center italic">Account Details</p>
+            <p className="text-xl text-center italic">
+              Beneficiary Account Details
+            </p>
           </div>
           <label className="font-bold text-orange-500">Bank: </label>
           <select

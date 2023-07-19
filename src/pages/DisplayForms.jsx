@@ -1,22 +1,37 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Display from "../components/displaypage/display";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useAuth } from "../hooks/useAuth";
+import { AuthContext } from "../pages/useContext/context.js";
 
 export const calculateTotal = (form) => {
-  return form.items.reduce((total, item) => total + item.amount, 0);
+  return (form.items ?? []).reduce((total, item) => total + item.amount, 0);
 };
 
-export function ViewPettyCashForm() {
-  const [displayForms, setDisplayForms] = useState([]);
+export function DisplayForms() {
+  const [showForms, setShowForms] = useState([]);
   const [selectedForm, setSelectedForm] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const formsPerPage = 20;
   const [searchForms, setSearchForms] = useState("");
+  const { user } = useContext(AuthContext);
+  console.log(user);
 
   const indexOfLastForm = currentPage * formsPerPage;
   const indexOFirstForm = indexOfLastForm - formsPerPage + 1;
-  const currentForms = displayForms
-    .filter((form) =>
+  const getPettyCashRequests = async (search) => {
+    try {
+      const response = await axios.get("http://localhost:3000/get-requests", {
+        search: search,
+      });
+      setShowForms(response?.data ?? []);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  const currentForms = showForms
+    ?.filter((form) =>
       form.name.toLowerCase().includes(searchForms.toLowerCase())
     )
     .slice()
@@ -31,36 +46,12 @@ export function ViewPettyCashForm() {
     setCurrentPage(currentPage - 1);
   };
 
-  const pageNumbers = Math.ceil(displayForms.length / formsPerPage);
-
-  useEffect(() => {
-    getPettyCashRequests();
-  }, []);
+  const pageNumbers = Math.ceil(showForms.length / formsPerPage);
 
   const navigate = useNavigate();
 
   const viewFormReturn = () => {
     setSelectedForm(null);
-  };
-
-  const getPettyCashRequests = async () => {
-    try {
-      const response = await fetch(
-        "http://localhost:3000/get-requests?search=${searchForms}",
-        {
-          method: "GET",
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch data");
-      }
-
-      const info = await response.json();
-      setDisplayForms(info.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
   };
 
   const handleFormClick = (form) => {
@@ -74,36 +65,62 @@ export function ViewPettyCashForm() {
     return id;
   };
 
+  const removeUser = () => {
+    window.localStorage.clear();
+    window.location.href = "/login";
+  };
+
+  const Profile = () => {};
+
+  // useEffect(() => {
+  //   removeUser();
+  // }, []);
+
+  useEffect(() => {
+    getPettyCashRequests();
+  }, []);
+
   return (
     <>
-      <nav className="bg-orange-600 py-4">
-        <div className="container mx-auto flex items-center justify-between px-4">
-          <ul className="flex space-x-4">
-            <li>
-              <Link
-                to="/"
-                className="text-orange-100 hover:text-white transition duration-300"
-              >
-                Home
-              </Link>
+      <nav className="bg-orange-600 h-12 sticky top-0">
+        <div className="container h-full mx-auto px-4 flex flex-row justify-around">
+          <ul className="flex flex-row items-center space-x- text-center h-12">
+            <li className="text-white hover:bg-orange-200 hover:text-black font-semibold w-16 h-12 flex items-center px-[9px] transition duration-300">
+              <Link to="/">Home</Link>
             </li>
-            <li>
-              <Link
-                to="/create-request"
-                className="text-orange-100 hover:text-white transition duration-300"
-              >
-                Submit PettyCash Form
-              </Link>
+            <li className="text-white hover:bg-orange-200 hover:text-black font-semibold w-28 h-12 flex items-center px-[9px] transition duration-300">
+              <Link to="/create-request">Submit Form</Link>
             </li>
-            <li>
-              <Link
-                to="/show-requests"
-                className="text-orange-100 hover:text-white transition duration-300"
-              >
-                View Submitted Forms
-              </Link>
+            <li className="text-white hover:bg-orange-200 hover:text-gray-900 font-semibold w-28 h-12 flex items-center px-[9px] transition duration-300">
+              <Link to="/show-requests">View Forms</Link>
             </li>
           </ul>
+          <input
+            className="h-8 my-2 rounded-lg placeholder:pl-1 shadow-lg border-2 border-gray-300 focus:ring-2 focus:ring-orange-600 focus:outline-none placeholder:after:pl-3"
+            type="text"
+            placeholder="Search forms..."
+            value={searchForms}
+            onChange={(e) => setSearchForms(e.target.value)}
+          />
+          <div
+            className="flex flex-row items-center cursor-pointer w-20 p-3 hover:bg-orange-200"
+            onClick={removeUser}
+          >
+            {/* <span className="flex text-center font-bold text-white hover:text-black">
+              Logout
+            </span> */}
+            <div className="h-1">
+              {user?.name ? (
+                <div>
+                  <span >Welcome, {user?.name}!</span>
+                </div>
+              ) : (
+                <div>
+                  <span>Log in to view your profile</span>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </nav>
       <div className="bg-gray-100 min-h-screen py-8">
@@ -111,13 +128,6 @@ export function ViewPettyCashForm() {
           <div className="flex justify-between items-center mb-4">
             <h1 className="text-4xl font-bold mb-4">View Petty Cash Form</h1>
             <div>
-              <input
-              className=" rounded-xl"
-                type="text"
-                placeholder=" Search forms..."
-                value={searchForms}
-                onChange={(e) => setSearchForms(e.target.value)}
-              />
               <button
                 className="text-blue-500 hover:underline"
                 onClick={goToPreviousPage}
@@ -176,3 +186,7 @@ export function ViewPettyCashForm() {
     </>
   );
 }
+
+//MODIFICATIONS
+//MODIFICATIONS
+//MODIFICATIONS

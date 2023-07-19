@@ -3,52 +3,36 @@ import Display from "../components/displaypage/display";
 import { useEffect } from "react";
 import axios from "axios";
 import { useState } from "react";
-import { calculateTotal } from "./ViewPettyCashForm";
+import { calculateTotal } from "./DisplayForms";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-export default function ViewForm(props) {
+export default function FetchForm(props) {
   const { id } = useParams();
   const [form, setForm] = useState();
   const navigate = useNavigate();
-  const fetchForm = async () => {
+  const getForm = async () => {
     try {
       const { data } = await axios.get(
         `http://localhost:3000/get-request/${id}`
       );
       console.log(data);
 
-      if (
-        data.data &&
-        data.data.accName &&
-        data.data.accNumber &&
-        data.data.bank
-      ) {
-        setForm({
-          ...data.data,
-          accountDetails: {
-            accountName: data.data.accName,
-            number: data.data.accNumber,
-            bank_name: data.data.bank,
-          },
-        });
-      } else {
-        setForm({
-          ...data.data,
-          accountDetails: {
-            accountName: data.data.accountDetails.accName,
-            number: data.data.accountDetails.accNumber,
-            bank_name: data.data.accountDetails.bank,
-          },
-        });
-      }
+      setForm({
+        ...data,
+        accountDetails: {
+          accountName: data.accountName,
+          number: data.number,
+          bank_name: data.bank,
+        },
+      });
     } catch (error) {
       console.log(error);
       alert("Failed to fetch request");
     }
   };
   useEffect(() => {
-    fetchForm();
+    getForm();
     return () => {};
   }, [id]);
 

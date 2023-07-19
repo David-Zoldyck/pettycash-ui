@@ -1,10 +1,13 @@
 // import logo from "./logo.svg";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import PetiCashForm from "../components/form.jsx";
 import Display from "../components/displaypage/display.jsx";
 import { Link, Route, Routes } from "react-router-dom";
+import { AuthContext } from "./useContext/context.js";
 
 export function PettyCashForm() {
+  const { name } = useContext(AuthContext);
+  console.log(name);
   const initialState = {
     name: "",
     date: "",
@@ -55,32 +58,17 @@ export function PettyCashForm() {
 
   return (
     <>
-      <nav className="bg-orange-600 py-4">
-        <div className="container mx-auto flex items-center justify-between px-4">
-          <ul className="flex space-x-4">
-            <li>
-              <Link
-                to="/"
-                className="text-orange-100 hover:text-white transition duration-300"
-              >
-                Home
-              </Link>
+      <nav className="bg-orange-600 h-12 sticky top-0">
+        <div className="container h-full mx-auto px-4">
+          <ul className="flex flex-row items-center space-x- text-center h-12">
+            <li className="text-white hover:bg-orange-200 hover:text-black font-semibold w-16 h-12 flex items-center px-[9px] transition duration-300">
+              <Link to="/">Home</Link>
             </li>
-            <li>
-              <Link
-                to="/create-request"
-                className="text-orange-100 hover:text-white transition duration-300"
-              >
-                Submit PettyCash Form
-              </Link>
+            <li className="text-white hover:bg-orange-200 hover:text-black font-semibold w-28 h-12 flex items-center px-[9px] transition duration-300">
+              <Link to="/create-request">Submit Form</Link>
             </li>
-            <li>
-              <Link
-                to="/show-requests"
-                className="text-orange-100 hover:text-white transition duration-300"
-              >
-                View Submitted Forms
-              </Link>
+            <li className="text-white hover:bg-orange-200 hover:text-gray-900 font-semibold w-28 h-12 flex items-center px-[9px] transition duration-300">
+              <Link to="/show-requests">View Forms</Link>
             </li>
           </ul>
         </div>

@@ -1,27 +1,26 @@
 import logo from "../components/assets/Cyberbytelogo.jpeg";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
 
-export default function ViewPettyCashRequest() {
+export default function ViewSubmittedRequest() {
   const { id } = useParams();
   const [form, setForm] = useState({});
   const navigate = useNavigate();
 
-  const fetchForm = async () => {
+  console.log(form.data);
+  const getForm = async () => {
     try {
       const response = await axios.get(
         `http://localhost:3000/get-request/${id}`
       );
 
-      setForm(response.data);
+      setForm(response.data.data);
     } catch (error) {
       console.log(error);
       alert("Failed to fetch request");
     }
   };
-  useEffect(() => {
-    fetchForm();
-  }, [id]);
 
   const formatCurrency = (value) => {
     return Intl.NumberFormat("en-NG", {
@@ -34,12 +33,20 @@ export default function ViewPettyCashRequest() {
     return <div>Petty Cash Request not found.</div>;
   }
 
+  useEffect(() => {
+    getForm();
+  }, [id]);
+
+  console.log(form.id);
+
   return (
     <div className="border border-1 w-2/3 mx-auto my-5 rounded">
       <header className="bg-orange-100">
         <img src={logo} alt="logo" className="mx-auto w-48" />
       </header>
+
       <div className="container mx-auto p-4 max-w-2xl bg-white">
+        <p>{form.id}</p>
         <h2 className="text-2xl font-bold text-center mb-6">
           {/* todo: personalize this */}
           Petty Cash Request
@@ -50,29 +57,30 @@ export default function ViewPettyCashRequest() {
             <strong>Name: </strong> {form.name}
           </p>
           <p>
-            <strong>Date: </strong>
+            <strong>Date of Expense: </strong>
             {form.date}
           </p>
         </div>
-
         <div className="mb-8">
-          <h3 className="text-lg font-bold mb-2">Account Details</h3>
+          <h3 className="text-lg font-bold mb-2">
+            Beneficiary Account Details
+          </h3>
           <p>
             <strong>Account Number: </strong>
-            {form.accountDetails.number}
+            {form.accountDetails?.number}
           </p>
           <p>
             <strong>Account Name: </strong>
-            {form.accountDetails.accountName}
+            {form.accountDetails?.accountName}
           </p>
           <p>
             <strong>Recipient Bank: </strong>
-            {form.accountDetails.bank}
+            {form.accountDetails?.bank}
           </p>
         </div>
         <div className="mb-8">
           <h3 className="text-lg font-bold mb-2">Details/Items</h3>
-          {form.items.length && (
+          {form.items?.length && (
             <>
               <table className="w-full">
                 <thead>
@@ -83,7 +91,7 @@ export default function ViewPettyCashRequest() {
                   </tr>
                 </thead>
                 <tbody>
-                  {form.items.map((item, index) => (
+                  {form.items?.map((item, index) => (
                     <tr key={index}>
                       <td className="px-4 py-2 border"> {index + 1}</td>
                       <td className="px-4 py-2 border"> {item.name}</td>
@@ -110,7 +118,7 @@ export default function ViewPettyCashRequest() {
           {form.authorizedBy}
         </p>
         <p>
-          <strong>Signature: </strong>
+          <strong>Approved By: </strong>
         </p>
         <div className="flex justify-between">
           <div>
