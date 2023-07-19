@@ -4,10 +4,10 @@ import PetiCashForm from "../components/form.jsx";
 import Display from "../components/displaypage/display.jsx";
 import { Link, Route, Routes } from "react-router-dom";
 import { AuthContext } from "./useContext/context.js";
+import axios from "axios";
 
 export function PettyCashForm() {
   const { name } = useContext(AuthContext);
-  console.log(name);
   const initialState = {
     name: "",
     date: "",
@@ -40,13 +40,10 @@ export function PettyCashForm() {
       // console.log("Total:", total);
       setTotal(total);
 
-      const response = await fetch("http://localhost:3000/create-request", {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify({ ...data, total }),
-      });
+      const response = await axios.post(
+        "http://localhost:3000/create-request",
+        { ...data, total }
+      );
 
       console.log(data);
       setForm(data);
