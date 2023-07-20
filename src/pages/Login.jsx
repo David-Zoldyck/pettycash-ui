@@ -7,9 +7,6 @@ import axios from "axios";
 import httpClient from "../hooks/server";
 
 const Login = () => {
-  // const { login } = useAuth();
-  // const [username, setUsername] = useState("");
-  // const [password, setPassword] = useState("");
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -20,42 +17,16 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // try {
-    //   const response = await fetch("http://localhost:3000/login", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({ username, password }),
-    //   });
-
-    //   const data = await response.json();
-
-    //   if (response.ok) {
-    //     const user = await currentUser(data.token);
-    //     // console.log(user);
-    //     login(user);
-    //     navigate("/");
-    //     // Monitor current logged in user
-    //   } else {
-    //     setError("Invalid username or password");
-    //   }
-    // } catch (error) {
-    //   console.error(error);
-    //   setError("An error occurred. Please try again");
-    // }
     console.log(formData);
-
     httpClient
       .post("/login", {
-        username: formData.username,
-        password: formData.password,
+        username: formData?.username,
+        password: formData?.password,
       })
       .then((response) => {
         console.log(response);
         localStorage.setItem("user", response.data.token);
-        navigate("/");
+        window.location.replace("/home");
       })
       .catch((err) => {
         console.log(err);
@@ -85,7 +56,7 @@ const Login = () => {
               type="text"
               id="username"
               name="username"
-              value={formData.username}
+              value={formData?.username}
               onChange={(e) => {
                 setFormData({ ...formData, username: e.target.value });
               }}
@@ -105,7 +76,7 @@ const Login = () => {
               type="password"
               id="password"
               name="password"
-              value={formData.password}
+              value={formData?.password}
               onChange={(e) => {
                 setFormData({ ...formData, password: e.target.value });
               }}

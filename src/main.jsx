@@ -12,14 +12,19 @@ import NotFound from "./pages/NotFound.jsx";
 import { AuthContext } from "./pages/useContext/context.js";
 import { useState } from "react";
 import { useAuth } from "./hooks/useAuth.js";
+import { useUser } from "./hooks/useUser.js";
 
 const Main = () => {
   // const { user, login: setUser } = useAuth();
-  const user = "Ben";
+  const { user } = useUser();
 
   const router = createBrowserRouter([
     {
       path: "/",
+      element: <Login />,
+    },
+    {
+      path: "/home",
       element: <App />,
     },
     {
@@ -55,7 +60,7 @@ const Main = () => {
   return (
     <div>
       <React.StrictMode>
-        <AuthContext.Provider value={{ currentUser: user ?? undefined }}>
+        <AuthContext.Provider value={{ user }}>
           <RouterProvider router={router} />
         </AuthContext.Provider>
       </React.StrictMode>

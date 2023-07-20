@@ -40,15 +40,15 @@ export default function Display({ form, total, onReturn }) {
           </h3>
           <p>
             <strong>Account Number: </strong>
-            {form.accountDetails.number}
+            {form.accountDetails?.number}
           </p>
           <p>
             <strong>Account Name: </strong>
-            {form.accountDetails.accountName}
+            {form.accountDetails?.accountName}
           </p>
           <p>
             <strong>Recipient Bank: </strong>
-            {form.accountDetails.bank_name}
+            {form.accountDetails?.bank}
           </p>
         </div>
         <div className="mb-8">

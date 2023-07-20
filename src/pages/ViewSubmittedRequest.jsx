@@ -2,11 +2,15 @@ import logo from "../components/assets/Cyberbytelogo.jpeg";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "./useContext/context";
 
 export default function ViewSubmittedRequest() {
   const { id } = useParams();
   const [form, setForm] = useState({});
   const navigate = useNavigate();
+
+  
 
   console.log(form.data);
   const getForm = async () => {

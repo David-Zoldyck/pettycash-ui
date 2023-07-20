@@ -2,8 +2,15 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link, Routes, Route } from "react-router-dom";
 import logo from "../components/assets/Cyberbytelogo.jpeg";
+import { useContext } from "react";
+import httpClient from "../hooks/server";
 
 const CreateUser = () => {
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+    confirmPassword: "",
+  });
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -13,27 +20,22 @@ const CreateUser = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    try {
-      const response = await fetch("http://localhost:3000/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password, confirmPassword }),
-      });
-      const data = await response.json();
-
-      if (response.ok) {
+    httpClient
+      .post("/register", {
+        username: formData.username,
+        password: formData.password,
+        confirmPassword: formData.confirmPassword,
+      })
+      .then((response) => {
+        console.log(response);
+        alert("User created successfully");
+        // localStorage.setItem("user", response.data.token);
         navigate("/");
-        alert("User created successfully!");
-      } else {
-        setError(data.error);
-      }
-    } catch (error) {
-      console.error(error);
-      setError("An error occurred. Please try again");
-    }
+      })
+      .catch((err) => {
+        console.log(err);
+        setError("An error occurred. Please try again");
+      });
   };
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -58,8 +60,10 @@ const CreateUser = () => {
               type="text"
               id="username"
               name="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={formData.username}
+              onChange={(e) => {
+                setFormData({ ...formData, username: e.target.value });
+              }}
               required
               className="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:border-blue-500"
             />
@@ -76,8 +80,10 @@ const CreateUser = () => {
               type="password"
               id="password"
               name="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={formData.password}
+              onChange={(e) => {
+                setFormData({ ...formData, password: e.target.value });
+              }}
               required
               className="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:border-blue-500"
             />
@@ -94,15 +100,17 @@ const CreateUser = () => {
               type="password"
               id="confirmPassword"
               name="confirmPassword"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              value={formData.confirmPassword}
+              onChange={(e) => {
+                setFormData({ ...formData, confirmPassword: e.target.value });
+              }}
               required
               className="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:border-blue-500"
             />
           </div>
 
           <button
-            type="submit"
+            onClick={handleSubmit}
             className="bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
           >
             Create

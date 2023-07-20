@@ -1,21 +1,18 @@
-import { useContext } from "react";
-import { AuthContext } from "../pages/useContext/context.js";
-import { useLocalStorage } from "./useLocalStorage";
+import React, { useState, useEffect } from "react";
+import { getCurrentUser } from "../utils/currentUser";
 
 export const useUser = () => {
-  const { user, setUser } = useContext(AuthContext);
-  const { setItem } = useLocalStorage();
+  const [user, setUser] = useState("");
 
-  const addUser = (user) => {
-    setUser(user);
-    setItem("user", JSON.stringify(user));
-    console.log(user);
+  const fetchData = async () => {
+    try {
+      const res = await getCurrentUser();
+      setUser(res.data);
+    } catch {}
   };
 
-  const removeUser = () => {
-    window.localStorage.clear();
-    window.location.href = "/login";
-  };
-
-  return { user, addUser, removeUser };
+  useEffect(() => {
+    fetchData();
+  }, []);
+  return { user };
 };
