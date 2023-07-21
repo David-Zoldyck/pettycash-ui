@@ -11,18 +11,26 @@ import { getCurrentUser } from "./utils/currentUser.js";
 import { BsPersonFill } from "react-icons/bs";
 import { useContext } from "react";
 import { AuthContext } from "./pages/useContext/context.js";
+import Modal from "react-modal";
 
 function App() {
   // const { user } = useUser();
   const { user } = useContext(AuthContext);
   const [showMenu, setShowMenu] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
   const handleMenuToggle = () => {
     setShowMenu(!showMenu);
   };
 
+  const handleModal = () => {
+    setShowModal(true);
+  };
+
   const removeUser = () => {
+    setShowModal(false);
     window.localStorage.clear();
-    window.location.replace = "/";
+    window.location.replace("/");
   };
 
   console.log(user);
@@ -68,7 +76,6 @@ function App() {
                     ? "bg-orange-400"
                     : "hover:bg-orange-200 hover:text-black"
                 }`}
-                /* Add transition duration here */
                 style={{ transition: "background-color 300ms" }}
               >
                 <div className="flex items-center space-x-2">
@@ -100,13 +107,39 @@ function App() {
                   <div className="py-1">
                     <button
                       className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                      onClick={removeUser}
+                      onClick={handleModal}
                     >
                       Logout
                     </button>
                   </div>
                 </div>
               ) : null}
+              {showModal && (
+                <div
+                  className="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-opacity-50 backdrop-filter backdrop-blur-sm"
+                  onClick={() => setShowModal(false)}
+                >
+                  <div className="modal bg-white p-6 rounded-lg shadow-lg">
+                    <h2 className="text-lg font-semibold mb-4">
+                      Are you sure you want to logout?
+                    </h2>
+                    <div className="flex space-x-4">
+                      <button
+                        className="confirm-btn flex-1 bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg"
+                        onClick={removeUser}
+                      >
+                        Confirm
+                      </button>
+                      <button
+                        className="confirm-btn flex-1 bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg"
+                        onClick={() => setShowModal(false)}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </ul>
         </div>

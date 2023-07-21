@@ -17,7 +17,9 @@ export function DisplayForms() {
   const [currentPage, setCurrentPage] = useState(1);
   const formsPerPage = 20;
   const [searchForms, setSearchForms] = useState("");
+  const [showModal, setShowModal] = useState(false)
   const { user } = useContext(AuthContext);
+  
   console.log(user);
 
   const indexOfLastForm = currentPage * formsPerPage;
@@ -90,7 +92,13 @@ export function DisplayForms() {
     return id;
   };
 
+
+  const handleModal = () => {
+    setShowModal(true);
+  };
+
   const removeUser = () => {
+    setShowModal(false)
     window.localStorage.clear();
     window.location.href = "/login";
   };
@@ -190,13 +198,39 @@ export function DisplayForms() {
                   <div className="py-1">
                     <button
                       className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-orange-200 hover:text-gray-900"
-                      onClick={removeUser}
+                      onClick={handleModal}
                     >
                       Logout
                     </button>
                   </div>
                 </div>
               ) : null}
+              {showModal && (
+                <div
+                  className="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-opacity-50 backdrop-filter backdrop-blur-sm"
+                  onClick={() => setShowModal(false)}
+                >
+                  <div className="modal bg-white p-6 rounded-lg shadow-lg">
+                    <h2 className="text-lg font-semibold mb-4">
+                      Are you sure you want to logout?
+                    </h2>
+                    <div className="flex space-x-4">
+                      <button
+                        className="confirm-btn flex-1 bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg"
+                        onClick={removeUser}
+                      >
+                        Confirm
+                      </button>
+                      <button
+                        className="confirm-btn flex-1 bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg"
+                        onClick={() => setShowModal(false)}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </ul>
         </div>

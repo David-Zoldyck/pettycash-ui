@@ -34,6 +34,14 @@ export default function PetiCashForm({
     );
   };
 
+  const calculateTotal = () => {
+    let total = 0;
+    form.items.forEach((item) => {
+      total += parseInt(item.amount);
+    });
+    return total;
+  };
+
   const [banks, setBanks] = useState([]);
   const getBanks = async () => {
     const banks = await fetch("http://localhost:3000/get-banks", {
@@ -227,6 +235,14 @@ export default function PetiCashForm({
                           </td>
                         </tr>
                       ))}
+                      <tr>
+                        <td className="px-4 py-2 border"></td>
+                        <td className="px-4 py-2 border font-bold">Total</td>
+                        <td className="px-4 py-2 border font-bold">
+                          {calculateTotal()}
+                        </td>
+                        <td className="px-4 py-2 border"></td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
