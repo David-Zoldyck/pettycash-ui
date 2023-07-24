@@ -1,62 +1,19 @@
-// import logo from "./logo.svg";
 import { useState, useContext } from "react";
-import PetiCashForm from "../components/form.jsx";
-import Display from "../components/displaypage/display.jsx";
-import { Link, Route, Routes } from "react-router-dom";
-import { AuthContext } from "./useContext/context.js";
-import axios from "axios";
-import httpClient from "../hooks/server.js";
-import { BsPersonFill } from "react-icons/bs";
+import { AuthContext } from "../pages/useContext/context";
+import { useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-export function PettyCashForm() {
-  const initialState = {
-    name: "",
-    date: "",
-    accountDetails: {
-      number: "",
-      bank: "",
-      accountName: "",
-    },
-    authorizedBy: "",
-    items: [],
-  };
-  const [form, setForm] = useState(initialState);
-  const [itemForm, setItemForm] = useState({ name: "", amount: 0 });
-  const [showForm, setShowForm] = useState(true);
-  const [total, setTotal] = useState();
-  const [showModal, setShowModal] = useState(false);
+const NavBar = () => {
   const { user } = useContext(AuthContext);
+  const [showMenu, setShowMenu] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [searchForms, setSearchForms] = useState("");
+  const location = useLocation();
 
-  const handleReturn = () => {
-    setForm(initialState);
-    setTotal(null);
-    setShowForm(true);
-  };
+  const showSearchBox = location.pathname === "/show-requests";
 
-  const onSubmit = async (data) => {
-    // Calculate the total amount
-    const total = data.items.reduce(
-      (accumulator, item) => accumulator + parseInt(item.amount),
-      0
-    );
-    setTotal(total);
-
-    // const response = await axios.post(
-    //   "http://localhost:3000/create-request",
-    //   { ...data, total }
-    // );
-    httpClient
-      .post("/create-request", {
-        ...data,
-        total,
-      })
-      .then((res) => {
-        setForm(res.data);
-        setShowForm(false);
-      })
-      .catch((err) => {
-        console.log("error", err);
-      });
+  const handleMenuToggle = () => {
+    setShowMenu(!showMenu);
   };
 
   const handleModal = () => {
@@ -66,13 +23,40 @@ export function PettyCashForm() {
   const removeUser = () => {
     setShowModal(false);
     window.localStorage.clear();
-    window.location.href = "/login";
+    window.location.replace("/");
   };
 
-  const [showMenu, setShowMenu] = useState(false);
-  const handleMenuToggle = () => {
-    setShowMenu(!showMenu);
-  };
+  let getPettyCashRequests;
+
+  if (user.role === "admin") {
+    getPettyCashRequests = async (search) => {
+      await httpClient
+        .get("/get-requests", {
+          search,
+        })
+        .then((res) => {
+          setShowForms(res.data);
+        })
+        .catch((err) => {
+          console.log("error: ", err);
+        });
+    };
+  } else {
+    getPettyCashRequests = async (search) => {
+      await httpClient
+        .get("/get-user-requests", {
+          search,
+        })
+        .then((res) => {
+          setShowForms(res.data);
+        })
+        .catch((err) => {
+          console.log("error: ", err);
+        });
+    };
+  }
+
+  const isAdmin = user.role === "admin";
 
   return (
     <>
@@ -83,31 +67,26 @@ export function PettyCashForm() {
               <li className="text-white hover:bg-orange-200 hover:text-black font-semibold w-16 h-12 flex items-center px-[9px] transition duration-300">
                 <Link to="/home">Home</Link>
               </li>
-              <li className="text-white hover:bg-orange-200 hover:text-black font-semibold w-28 h-12 flex items-center px-[9px] transition duration-300">
-                <Link to="/create-request">Submit Form</Link>
-              </li>
+              {!isAdmin ? (
+                <li className="text-white hover:bg-orange-200 hover:text-black font-semibold w-28 h-12 flex items-center px-[9px] transition duration-300">
+                  <Link to="/create-request">Submit Form</Link>
+                </li>
+              ) : null}
+
               <li className="text-white hover:bg-orange-200 hover:text-gray-900 font-semibold w-28 h-12 flex items-center px-[9px] transition duration-300">
                 <Link to="/show-requests">View Forms</Link>
               </li>
             </div>
-            {/* <div>
-              <li>
-                <Link
-                  to="/create-account"
-                  className="text-white hover:bg-orange-200 hover:text-gray-900 font-semibold w-28 h-12 flex items-center px-[9px] transition duration-300"
-                >
-                  Create User
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/login"
-                  className="text-white hover:bg-orange-200 hover:text-gray-900 font-semibold w-28 h-12 flex items-center px-[9px] transition duration-300"
-                >
-                  Login
-                </Link>
-              </li>
-            </div> */}
+            {showSearchBox && (
+              <input
+                className="h-8 my-2 rounded-lg placeholder:pl-1 shadow-lg border-2 border-gray-300 focus:ring-2 focus:ring-orange-600 focus:outline-none placeholder:after:pl-3"
+                type="text"
+                placeholder="Search forms..."
+                value={searchForms}
+                onChange={(e) => setSearchForms(e.target.value)}
+              />
+            )}
+
             <div className="relative">
               <div
                 onClick={handleMenuToggle}
@@ -121,7 +100,7 @@ export function PettyCashForm() {
                 <div className="flex items-center space-x-2">
                   <BsPersonFill className="w-7 h-7 text-white" />
                   <span className="text-white font-semibold hover:text-black">
-                    {user.username}
+                    {user?.username}
                   </span>
                 </div>
                 <div className="transform transition-transform">
@@ -184,24 +163,9 @@ export function PettyCashForm() {
           </ul>
         </div>
       </nav>
-      <div className="">
-        {showForm && (
-          <PetiCashForm
-            submit={onSubmit}
-            setForm={setForm}
-            form={form}
-            itemForm={itemForm}
-            setItemForm={setItemForm}
-          />
-        )}
-        {!showForm && (
-          <Display
-            form={form?.newPettyCashRequest}
-            total={total}
-            onReturn={handleReturn}
-          />
-        )}
-      </div>
+      ;
     </>
   );
-}
+};
+
+export default NavBar;

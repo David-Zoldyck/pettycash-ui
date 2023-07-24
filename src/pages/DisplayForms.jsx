@@ -17,10 +17,10 @@ export function DisplayForms() {
   const [currentPage, setCurrentPage] = useState(1);
   const formsPerPage = 20;
   const [searchForms, setSearchForms] = useState("");
-  const [showModal, setShowModal] = useState(false)
+  const [showModal, setShowModal] = useState(false);
   const { user } = useContext(AuthContext);
-  
-  console.log(user);
+
+;
 
   const indexOfLastForm = currentPage * formsPerPage;
   const indexOFirstForm = indexOfLastForm - formsPerPage + 1;
@@ -34,7 +34,6 @@ export function DisplayForms() {
           search,
         })
         .then((res) => {
-          console.log(res.data);
           setShowForms(res.data);
         })
         .catch((err) => {
@@ -48,7 +47,6 @@ export function DisplayForms() {
           search,
         })
         .then((res) => {
-          console.log(res.data);
           setShowForms(res.data);
         })
         .catch((err) => {
@@ -92,13 +90,12 @@ export function DisplayForms() {
     return id;
   };
 
-
   const handleModal = () => {
     setShowModal(true);
   };
 
   const removeUser = () => {
-    setShowModal(false)
+    setShowModal(false);
     window.localStorage.clear();
     window.location.href = "/login";
   };
@@ -109,6 +106,8 @@ export function DisplayForms() {
   const handleMenuToggle = () => {
     setShowMenu(!showMenu);
   };
+
+  const isAdmin = user.role === "admin";
 
   // useEffect(() => {
   //   removeUser();
@@ -127,31 +126,15 @@ export function DisplayForms() {
               <li className="text-white hover:bg-orange-200 hover:text-black font-semibold w-16 h-12 flex items-center px-[9px] transition duration-300">
                 <Link to="/home">Home</Link>
               </li>
-              <li className="text-white hover:bg-orange-200 hover:text-black font-semibold w-28 h-12 flex items-center px-[9px] transition duration-300">
-                <Link to="/create-request">Submit Form</Link>
-              </li>
+              {!isAdmin ? (
+                <li className="text-white hover:bg-orange-200 hover:text-black font-semibold w-28 h-12 flex items-center px-[9px] transition duration-300">
+                  <Link to="/create-request">Submit Form</Link>
+                </li>
+              ) : null}
               <li className="text-white hover:bg-orange-200 hover:text-gray-900 font-semibold w-28 h-12 flex items-center px-[9px] transition duration-300">
                 <Link to="/show-requests">View Forms</Link>
               </li>
             </div>
-            {/* <div>
-              <li>
-                <Link
-                  to="/create-account"
-                  className="text-white hover:bg-orange-200 hover:text-gray-900 font-semibold w-28 h-12 flex items-center px-[9px] transition duration-300"
-                >
-                  Create User
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/login"
-                  className="text-white hover:bg-orange-200 hover:text-gray-900 font-semibold w-28 h-12 flex items-center px-[9px] transition duration-300"
-                >
-                  Login
-                </Link>
-              </li>
-            </div> */}
             <input
               className="h-8 my-2 rounded-lg placeholder:pl-1 shadow-lg border-2 border-gray-300 focus:ring-2 focus:ring-orange-600 focus:outline-none placeholder:after:pl-3"
               type="text"
@@ -248,7 +231,7 @@ export function DisplayForms() {
         <div className="container mx-auto">
           <div className="flex justify-between items-center mb-4">
             <h1 className="text-4xl font-bold mb-4">View Petty Cash Form</h1>
-            <div>
+            <div className="sticky">
               <button
                 className="text-blue-500 hover:underline"
                 onClick={goToPreviousPage}
@@ -265,31 +248,52 @@ export function DisplayForms() {
               </button>
             </div>
           </div>
-          <ul>
+          <ul className="grid lg:grid-cols-3 gap-8  md:grid-cols-2 sm:grid-cols-1 sm:mx-12">
             {currentForms.map((form, index) => (
               <li
                 key={form._id}
                 className={`p-4 mb-4 ${
                   index % 2 === 0 ? "bg-white" : "bg-orange-100"
-                }`}
+                } shadow-2xl rounded-lg`}
                 // onClick={() => handleFormClick(form)}
               >
-                <span>
-                  <strong>{`${form.name}`}</strong>
-                </span>
-                <span> - APPLICATION FORM</span> <br />
-                <div className="flex items-center">
-                  <span className="text-gray-600">{`${form.date}`}</span>
-                  <span className="ml-2 text-gray-500 text-sm truncate">{`(ID: ${truncateFormId(
-                    form._id
-                  )})`}</span>
+                <div>
+                  <div>
+                    <div className="flex space-x-6">
+                      <div>
+                        <span>
+                          <strong className="capitalizes">{`${form.name}`}</strong>
+                        </span>
+                        <span> - APPLICATION FORM</span> <br />
+                      </div>
+                      <span
+                        className={`font-bold ${
+                          form.status === "approved"
+                            ? "text-green-500 font-semibold capitalize"
+                            : form.status === "rejected"
+                            ? "text-red-500 font-semibold capitalize"
+                            : "text-gray-500 font-semibold capitalize"
+                        }`}
+                      >
+                        {form.status}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center">
+                      <span className="text-gray-600">{`${form.date}`}</span>
+                      <span className="ml-2 text-gray-500 text-sm truncate">{`(ID: ${truncateFormId(
+                        form._id
+                      )})`}</span>
+                    </div>
+                  </div>
+                  <div></div>
+                  <Link
+                    to={`/show-requests/${form._id}`}
+                    className="ml-2 text-blue-500 hover:underline"
+                  >
+                    View Details
+                  </Link>
                 </div>
-                <Link
-                  to={`/show-requests/${form._id}`}
-                  className="ml-2 text-blue-500 hover:underline"
-                >
-                  View Details
-                </Link>
               </li>
             ))}
           </ul>

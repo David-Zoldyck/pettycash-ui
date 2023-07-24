@@ -16,7 +16,6 @@ export default function FetchForm(props) {
       const { data } = await axios.get(
         `http://localhost:3000/get-request/${id}`
       );
-      console.log(data);
 
       setForm({
         ...data,

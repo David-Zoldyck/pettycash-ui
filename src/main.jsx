@@ -13,6 +13,8 @@ import { AuthContext } from "./pages/useContext/context.js";
 import { useState } from "react";
 import { useAuth } from "./hooks/useAuth.js";
 import { useUser } from "./hooks/useUser.js";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Main = () => {
   // const { user, login: setUser } = useAuth();
@@ -59,13 +61,18 @@ const Main = () => {
 
   return (
     <div>
-      <React.StrictMode>
+      <>
         <AuthContext.Provider value={{ user }}>
           <RouterProvider router={router} />
         </AuthContext.Provider>
-      </React.StrictMode>
+      </>
     </div>
   );
 };
 
-ReactDOM.createRoot(document.getElementById("root")).render(<Main />);
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <Main />
+    <ToastContainer />
+  </React.StrictMode>
+);

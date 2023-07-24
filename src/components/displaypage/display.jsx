@@ -2,7 +2,6 @@ import { useState } from "react";
 import logo from "../assets/Cyberbytelogo.jpeg";
 
 export default function Display({ form, total, onReturn }) {
-  console.log(form);
   const formatCurrency = (value) => {
     return Intl.NumberFormat("en-NG", {
       style: "currency",

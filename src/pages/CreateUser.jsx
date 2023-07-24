@@ -4,6 +4,7 @@ import { Link, Routes, Route } from "react-router-dom";
 import logo from "../components/assets/Cyberbytelogo.jpeg";
 import { useContext } from "react";
 import httpClient from "../hooks/server";
+import { toast } from "react-toastify";
 
 const CreateUser = () => {
   const [formData, setFormData] = useState({
@@ -26,15 +27,34 @@ const CreateUser = () => {
         password: formData.password,
         confirmPassword: formData.confirmPassword,
       })
-      .then((response) => {
-        console.log(response);
-        alert("User created successfully");
+      .then(({ data }) => {
+        // alert("User created successfully");
         // localStorage.setItem("user", response.data.token);
-        navigate("/");
+        toast.success("User created successfully", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        navigate("/login");
       })
       .catch((err) => {
         console.log(err);
-        setError("An error occurred. Please try again");
+        toast.error("An Error has occured", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        // setError("An error occurred. Please try again");
       });
   };
   return (

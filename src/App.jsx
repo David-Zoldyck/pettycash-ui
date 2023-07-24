@@ -33,7 +33,8 @@ function App() {
     window.location.replace("/");
   };
 
-  console.log(user);
+  const isAdmin = user.role === "admin";
+
   return (
     <>
       <nav className="bg-orange-600 h-12 sticky top-0">
@@ -43,9 +44,12 @@ function App() {
               <li className="text-white hover:bg-orange-200 hover:text-black font-semibold w-16 h-12 flex items-center px-[9px] transition duration-300">
                 <Link to="/home">Home</Link>
               </li>
-              <li className="text-white hover:bg-orange-200 hover:text-black font-semibold w-28 h-12 flex items-center px-[9px] transition duration-300">
-                <Link to="/create-request">Submit Form</Link>
-              </li>
+              {!isAdmin ? (
+                <li className="text-white hover:bg-orange-200 hover:text-black font-semibold w-28 h-12 flex items-center px-[9px] transition duration-300">
+                  <Link to="/create-request">Submit Form</Link>
+                </li>
+              ) : null}
+
               <li className="text-white hover:bg-orange-200 hover:text-gray-900 font-semibold w-28 h-12 flex items-center px-[9px] transition duration-300">
                 <Link to="/show-requests">View Forms</Link>
               </li>
@@ -106,7 +110,7 @@ function App() {
                 <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                   <div className="py-1">
                     <button
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-orange-200 hover:text-gray-900"
                       onClick={handleModal}
                     >
                       Logout

@@ -5,6 +5,7 @@ import logo from "../components/assets/Cyberbytelogo.jpeg";
 import { useAuth } from "../hooks/useAuth";
 import axios from "axios";
 import httpClient from "../hooks/server";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -17,19 +18,29 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
     httpClient
       .post("/login", {
         username: formData?.username,
         password: formData?.password,
       })
       .then((response) => {
-        console.log(response);
         localStorage.setItem("user", response.data.token);
+        console.log(response);
         window.location.replace("/home");
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err.response.data.error);
+        // const message = err?.response?.data?.error;
+        // toast.error(message, {
+        //   position: "top-right",
+        //   autoClose: 3000,
+        //   hideProgressBar: false,
+        //   closeOnClick: true,
+        //   pauseOnHover: true,
+        //   draggable: true,
+        //   progress: undefined,
+        //   theme: "light",
+        // });
         setError("Invalid username or password");
       });
   };
