@@ -137,7 +137,7 @@ export default function PetiCashForm({
             <option value="" disabled hidden>
               Select Bank
             </option>
-            {banks.map((bank, index) => (
+            {banks?.map((bank, index) => (
               <option value={bank.code} key={bank.id}>
                 {bank.name}
               </option>
@@ -220,7 +220,7 @@ export default function PetiCashForm({
                       </tr>
                     </thead>
                     <tbody>
-                      {form.items.map((item, index) => (
+                      {form.items?.map((item, index) => (
                         <tr onDoubleClick={() => removeItem(index)} key={index}>
                           <td className="px-4 py-2 border"> {index + 1}</td>
                           <td className="px-4 py-2 border"> {item.name}</td>

@@ -9,7 +9,7 @@ import ViewSubmittedRequest from "./pages/ViewSubmittedRequest.jsx";
 import CreateUser from "./pages/CreateUser.jsx";
 import Login from "./pages/Login.jsx";
 import NotFound from "./pages/NotFound.jsx";
-import { AuthContext } from "./pages/useContext/context.js";
+import { AuthContext, SearchContext } from "./pages/useContext/context.js";
 import { useState } from "react";
 import { useAuth } from "./hooks/useAuth.js";
 import { useUser } from "./hooks/useUser.js";
@@ -19,6 +19,7 @@ import "react-toastify/dist/ReactToastify.css";
 const Main = () => {
   // const { user, login: setUser } = useAuth();
   const { user } = useUser();
+  const [search, setSearch] = useState("");
 
   const router = createBrowserRouter([
     {
@@ -63,7 +64,9 @@ const Main = () => {
     <div>
       <>
         <AuthContext.Provider value={{ user }}>
-          <RouterProvider router={router} />
+          <SearchContext.Provider value={{ search, setSearch }}>
+            <RouterProvider router={router} />
+          </SearchContext.Provider>
         </AuthContext.Provider>
       </>
     </div>

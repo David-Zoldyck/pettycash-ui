@@ -1,16 +1,30 @@
 import { useState, useContext } from "react";
-import { AuthContext } from "../pages/useContext/context";
+import { AuthContext, SearchContext } from "../pages/useContext/context";
 import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { BsPersonFill } from "react-icons/bs";
 
 const NavBar = () => {
   const { user } = useContext(AuthContext);
   const [showMenu, setShowMenu] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [searchForms, setSearchForms] = useState("");
+  const { search, setSearch } = useContext(SearchContext);
+  // const [searchForms, setSearchForms] = useState("");
+  const [showForms, setShowForms] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const formsPerPage = 20;
   const location = useLocation();
 
   const showSearchBox = location.pathname === "/show-requests";
+
+  const indexOfLastForm = currentPage * formsPerPage;
+  const indexOFirstForm = indexOfLastForm - formsPerPage + 1;
+
+  const currentForms = showForms
+    ?.filter((form) => form.name.toLowerCase().includes(search.toLowerCase()))
+    .slice()
+    .reverse()
+    .slice(indexOFirstForm - 1, indexOfLastForm);
 
   const handleMenuToggle = () => {
     setShowMenu(!showMenu);
@@ -82,8 +96,8 @@ const NavBar = () => {
                 className="h-8 my-2 rounded-lg placeholder:pl-1 shadow-lg border-2 border-gray-300 focus:ring-2 focus:ring-orange-600 focus:outline-none placeholder:after:pl-3"
                 type="text"
                 placeholder="Search forms..."
-                value={searchForms}
-                onChange={(e) => setSearchForms(e.target.value)}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
               />
             )}
 
