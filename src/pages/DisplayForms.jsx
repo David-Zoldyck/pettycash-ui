@@ -18,7 +18,6 @@ export function DisplayForms() {
   const [currentPage, setCurrentPage] = useState(1);
   const formsPerPage = 20;
   const { search } = useContext(SearchContext);
-  // const [searchForms, setSearchForms] = useState("");
   const [showModal, setShowModal] = useState(false);
   const { user } = useContext(AuthContext);
 
@@ -33,8 +32,8 @@ export function DisplayForms() {
         .get("/get-requests", {
           search,
         })
-        .then((res) => {
-          setShowForms(res.data);
+        .then(({ data }) => {
+          setShowForms(data);
         })
         .catch((err) => {
           console.log("error: ", err);
@@ -46,8 +45,8 @@ export function DisplayForms() {
         .get("/get-user-requests", {
           search,
         })
-        .then((res) => {
-          setShowForms(res.data);
+        .then(({ data }) => {
+          setShowForms(data);
         })
         .catch((err) => {
           console.log("error: ", err);
@@ -113,19 +112,17 @@ export function DisplayForms() {
 
   useEffect(() => {
     getPettyCashRequests();
-  }, []);
+  }, [user]);
+
+  useEffect(() => {
+    if (!localStorage.getItem("user")) {
+      navigate("/");
+    }
+  });
 
   return (
     <>
       <NavBar />
-
-      {/* <input
-        className="h-8 my-2 rounded-lg placeholder:pl-1 shadow-lg border-2 border-gray-300 focus:ring-2 focus:ring-orange-600 focus:outline-none placeholder:after:pl-3"
-        type="text"
-        placeholder="Search forms..."
-        value={searchForms}
-        onChange={(e) => setSearchForms(e.target.value)}
-      /> */}
 
       <div className="bg-gray-100 min-h-screen py-8">
         <div className="container mx-auto">
@@ -187,12 +184,14 @@ export function DisplayForms() {
                     </div>
                   </div>
                   <div></div>
-                  <Link
-                    to={`/show-requests/${form._id}`}
-                    className="ml-2 text-blue-500 hover:underline"
+                  <div
+                    onClick={() => {
+                      navigate(`/home/show-requests/${form._id}`);
+                    }}
+                    className="ml-2 text-blue-500 hover:underline hover:cursor-pointer"
                   >
                     View Details
-                  </Link>
+                  </div>
                 </div>
               </li>
             ))}

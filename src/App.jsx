@@ -1,7 +1,7 @@
 import { useState } from "react";
 import PetiCashForm from "./components/form.jsx";
 import Display from "./components/displaypage/display.jsx";
-import { Link, Route, Routes } from "react-router-dom";
+import { Link, Route, Routes, useNavigate } from "react-router-dom";
 import { Home } from "./pages/Home.jsx";
 import logo from "../src/components/assets/Cyberbytelogo.jpeg";
 import httpClient from "./hooks/server.js";
@@ -19,6 +19,7 @@ function App() {
   const { user } = useContext(AuthContext);
   const [showMenu, setShowMenu] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
 
   const handleMenuToggle = () => {
     setShowMenu(!showMenu);
@@ -35,6 +36,12 @@ function App() {
   };
 
   const isAdmin = user.role === "admin";
+
+  useEffect(() => {
+    if (!localStorage.getItem("user")) {
+      navigate("/");
+    }
+  });
 
   return (
     <>

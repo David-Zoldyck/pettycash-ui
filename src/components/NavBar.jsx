@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import { AuthContext, SearchContext } from "../pages/useContext/context";
 import { useLocation } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { BsPersonFill } from "react-icons/bs";
 
 const NavBar = () => {
@@ -9,6 +9,7 @@ const NavBar = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const { search, setSearch } = useContext(SearchContext);
+  const navigate = useNavigate();
   // const [searchForms, setSearchForms] = useState("");
   const [showForms, setShowForms] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -78,17 +79,35 @@ const NavBar = () => {
         <div className="container h-full mx-auto px-4">
           <ul className="flex flex-row items-center space-x- text-center h-12 justify-between">
             <div className="flex flex-row space-x-12">
-              <li className="text-white hover:bg-orange-200 hover:text-black font-semibold w-16 h-12 flex items-center px-[9px] transition duration-300">
-                <Link to="/home">Home</Link>
+              <li className="text-white hover:bg-orange-200 hover:text-black font-semibold w-16 h-12 flex items-center px-[9px] transition duration-300 hover:cursor-pointer">
+                <div
+                  onClick={() => {
+                    navigate("/home");
+                  }}
+                >
+                  Home
+                </div>
               </li>
               {!isAdmin ? (
-                <li className="text-white hover:bg-orange-200 hover:text-black font-semibold w-28 h-12 flex items-center px-[9px] transition duration-300">
-                  <Link to="/create-request">Submit Form</Link>
+                <li className="text-white hover:bg-orange-200 hover:text-black font-semibold w-28 h-12 flex items-center px-[9px] transition duration-300 hover:cursor-pointer">
+                  <div
+                    onClick={() => {
+                      navigate("/home/create-request");
+                    }}
+                  >
+                    Submit Form
+                  </div>
                 </li>
               ) : null}
 
-              <li className="text-white hover:bg-orange-200 hover:text-gray-900 font-semibold w-28 h-12 flex items-center px-[9px] transition duration-300">
-                <Link to="/show-requests">View Forms</Link>
+              <li className="text-white hover:bg-orange-200 hover:text-gray-900 font-semibold w-28 h-12 flex items-center px-[9px] transition duration-300 hover:cursor-pointer">
+                <div
+                  onClick={() => {
+                    navigate("/home/show-requests");
+                  }}
+                >
+                  View Forms
+                </div>
               </li>
             </div>
             {showSearchBox && (
@@ -177,7 +196,6 @@ const NavBar = () => {
           </ul>
         </div>
       </nav>
-      ;
     </>
   );
 };

@@ -28,35 +28,41 @@ const Main = () => {
     },
     {
       path: "/home",
-      element: <App />,
-    },
-    {
-      path: "/create-request",
-      element: <PettyCashForm />,
-    },
-    // {
-    //   path: "/view-request",
-    //   element: <ViewRequest />,
-    // },
-    {
-      path: "/show-requests",
-      element: <DisplayForms />,
-    },
-    {
-      path: "/show-requests/:id",
-      element: <ViewSubmittedRequest />,
-    },
-    {
-      path: "/login",
-      element: <Login />,
-    },
-    {
-      path: "/create-account",
-      element: <CreateUser />,
-    },
-    {
-      path: "*",
-      element: <NotFound />,
+      children: [
+        {
+          path: "/home",
+          element: <App />,
+        },
+        {
+          path: "/home/create-request",
+          element: <PettyCashForm />,
+        },
+        {
+          path: "/home/show-requests",
+          children: [
+            {
+              path: "/home/show-requests",
+              element: <DisplayForms />,
+            },
+            {
+              path: "/home/show-requests/:id",
+              element: <ViewSubmittedRequest />,
+            },
+          ],
+        },
+        {
+          path: "/home/login",
+          element: <Login />,
+        },
+        {
+          path: "/home/create-account",
+          element: <CreateUser />,
+        },
+        {
+          path: "*",
+          element: <NotFound />,
+        },
+      ],
     },
   ]);
 
