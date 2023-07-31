@@ -11,6 +11,7 @@ const CreateUser = () => {
     username: "",
     password: "",
     confirmPassword: "",
+    email: "",
   });
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -26,6 +27,7 @@ const CreateUser = () => {
         username: formData.username,
         password: formData.password,
         confirmPassword: formData.confirmPassword,
+        email: formData.email,
       })
       .then(({ data }) => {
         // alert("User created successfully");
@@ -40,7 +42,7 @@ const CreateUser = () => {
           progress: undefined,
           theme: "light",
         });
-        navigate("/login");
+        navigate("/home/login");
       })
       .catch((err) => {
         console.log(err);
@@ -83,6 +85,26 @@ const CreateUser = () => {
               value={formData.username}
               onChange={(e) => {
                 setFormData({ ...formData, username: e.target.value });
+              }}
+              required
+              className="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:border-blue-500"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label
+              htmlFor="email"
+              className="block text-gray-700 font-bold mb-2"
+            >
+              Email:
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={(e) => {
+                setFormData({ ...formData, email: e.target.value });
               }}
               required
               className="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:border-blue-500"
@@ -139,7 +161,7 @@ const CreateUser = () => {
           <p className="mt-2">
             Already have an account?{" "}
             <Link
-              to="/login"
+              to="/home/login"
               className="text-blue-600 hover:text-orange-600 transition duration-300"
             >
               Click here

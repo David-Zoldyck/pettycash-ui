@@ -107,7 +107,7 @@ const Login = () => {
             <p>
               Don't have an account?{" "}
               <Link
-                to="/create-account"
+                to="/home/create-account"
                 className="text-blue-600 hover:text-orange-600 transition duration-300"
               >
                 Click here

@@ -82,7 +82,7 @@ export default function PetiCashForm({
       {/* <h1 className="text-xl ">
         Fill in the required details
       </h1> */}
-      {/* <p>{JSON.stringify(form)}</p> */}
+      {/* <p>{.stringify(form)}</p> */}
       {/* <div className="relative top-0 bottom-0 right-0 left-0">
         <p>TRIAL</p>
       </div> */}

@@ -7,6 +7,7 @@ import { PettyCashForm } from "./pages/PettyCashForm.jsx";
 import { DisplayForms } from "./pages/DisplayForms.jsx";
 import ViewSubmittedRequest from "./pages/ViewSubmittedRequest.jsx";
 import CreateUser from "./pages/CreateUser.jsx";
+import ResetPassword from "./pages/ResetPassword.jsx";
 import Login from "./pages/Login.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import { AuthContext, SearchContext } from "./pages/useContext/context.js";
@@ -57,6 +58,10 @@ const Main = () => {
         {
           path: "/home/create-account",
           element: <CreateUser />,
+        },
+        {
+          path: "/home/reset-password",
+          element: <ResetPassword />,
         },
         {
           path: "*",
