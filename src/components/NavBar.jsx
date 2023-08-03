@@ -16,7 +16,7 @@ const NavBar = () => {
   const formsPerPage = 20;
   const location = useLocation();
 
-  const showSearchBox = location.pathname === "/show-requests";
+  const showSearchBox = location.pathname === "/home/show-requests";
 
   const indexOfLastForm = currentPage * formsPerPage;
   const indexOFirstForm = indexOfLastForm - formsPerPage + 1;

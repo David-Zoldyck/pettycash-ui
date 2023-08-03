@@ -95,7 +95,16 @@ const Login = () => {
               className="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:border-blue-500"
             />
           </div>
-
+          <div className="flex justify-end">
+            <p>
+              <Link
+                to="/home/reset-password"
+                className="text-blue-600 hover:text-orange-600 transition duration-300"
+              >
+                Forgot Password?
+              </Link>
+            </p>
+          </div>
           <button
             className="bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
             onClick={handleSubmit}
