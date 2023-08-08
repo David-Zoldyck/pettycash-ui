@@ -23,7 +23,7 @@ export default function ViewSubmittedRequest() {
   const getForm = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3000/get-request/${id}`
+        `${import.meta.env.VITE_API_BASE_URL}/get-request/${id}`
       );
 
       setForm(response.data.data);
@@ -71,12 +71,15 @@ export default function ViewSubmittedRequest() {
   const handleApprove = async () => {
     const token = localStorage.getItem("user");
     try {
-      const res = await fetch(`http://localhost:3000/request/${id}/approve`, {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/request/${id}/approve`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       if (res.status === "approved") {
         alert("Status has been updated to 'approved'");
       }
@@ -100,12 +103,15 @@ export default function ViewSubmittedRequest() {
   const handleReject = async () => {
     const token = localStorage.getItem("user");
     try {
-      const res = await fetch(`http://localhost:3000/request/${id}/reject`, {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/request/${id}/reject`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       if (res.status === "rejected") {
         alert("Status has been updated to 'rejected'");
       }
@@ -128,6 +134,8 @@ export default function ViewSubmittedRequest() {
       alert("Failed to reject the request.");
     }
   };
+
+
   // const handleReject = async () => {
   //   try {
   //     await axios.put(`http://localhost:3000/request/${id}/reject`);

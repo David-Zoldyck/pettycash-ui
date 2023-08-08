@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import logo from "./assets/Cyberbytelogo.jpeg";
 import "./style.css";
+import axios from "axios";
 
 export default function PetiCashForm({
   submit,
@@ -44,23 +45,29 @@ export default function PetiCashForm({
 
   const [banks, setBanks] = useState([]);
   const getBanks = async () => {
-    const banks = await fetch("http://localhost:3000/get-banks", {
-      method: "GET",
-    }).then((res) => res.json());
+    const banks = await fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/get-banks`,
+      {
+        method: "GET",
+      }
+    ).then((res) => res.json());
     setBanks(banks.data);
   };
   const resolveAccount = async (bankCode, accountNumber) => {
     setLoadingAccount(true);
-    const banks = await fetch("http://localhost:3000/resolve-bank", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        account_number: accountNumber,
-        bank_code: bankCode,
-      }),
-    })
+    const banks = await fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/resolve-bank`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          account_number: accountNumber,
+          bank_code: bankCode,
+        }),
+      }
+    )
       .then((res) => res.json())
       .finally(() => {
         setLoadingAccount(false);

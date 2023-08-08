@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import logo from "../assets/Cyberbytelogo.jpeg";
+import { AuthContext } from "../../pages/useContext/context.js";
 
 export default function Display({ form, total, onReturn }) {
   const formatCurrency = (value) => {
@@ -8,6 +9,9 @@ export default function Display({ form, total, onReturn }) {
       currency: "NGN",
     }).format(value);
   };
+
+  const { user } = useContext(AuthContext);
+  console.log(user.name);
 
   if (!form) {
     return <div>No form data to display</div>;

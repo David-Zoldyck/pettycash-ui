@@ -13,62 +13,61 @@ export const calculateTotal = (form) => {
 };
 
 export function DisplayForms() {
-  const [showForms, setShowForms] = useState([]);
+  const [showForms, setShowForms] = useState({
+    forms: [],
+    currentPage: 1,
+    totalPages: 1,
+  });
+  const [isLoading, setLoading] = useState(false);
   const [selectedForm, setSelectedForm] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const formsPerPage = 20;
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const formsPerPage = 20;
   const { search } = useContext(SearchContext);
   const [showModal, setShowModal] = useState(false);
   const { user } = useContext(AuthContext);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [query, setQuery] = useState("");
 
-  const indexOfLastForm = currentPage * formsPerPage;
-  const indexOFirstForm = indexOfLastForm - formsPerPage + 1;
+  // const indexOfLastForm = currentPage * formsPerPage;
+  // const indexOFirstForm = indexOfLastForm - formsPerPage + 1;
 
-  let getPettyCashRequests;
+  const getPettyCashRequests = async (search) => {
+    setLoading(true);
+    const url =
+      user.role === "admin"
+        ? `/get-requests?page=${currentPage}&q=${query}`
+        : `/get-user-requests?page=${currentPage}&q=${query}`;
+    await httpClient
+      .get(url)
+      .then(({ data }) => {
+        setShowForms(data);
+      })
+      .catch((err) => {
+        console.log("error: ", err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
-  if (user.role === "admin") {
-    getPettyCashRequests = async (search) => {
-      await httpClient
-        .get("/get-requests", {
-          search,
-        })
-        .then(({ data }) => {
-          setShowForms(data);
-        })
-        .catch((err) => {
-          console.log("error: ", err);
-        });
-    };
-  } else {
-    getPettyCashRequests = async (search) => {
-      await httpClient
-        .get("/get-user-requests", {
-          search,
-        })
-        .then(({ data }) => {
-          setShowForms(data);
-        })
-        .catch((err) => {
-          console.log("error: ", err);
-        });
-    };
-  }
-
-  const currentForms = showForms
-    ?.filter((form) => form.name.toLowerCase().includes(search.toLowerCase()))
-    .slice()
-    .reverse()
-    .slice(indexOFirstForm - 1, indexOfLastForm);
+  // const currentForms = () =>
+  //   showForms.forms
+  //     .filter((form) => form.name.toLowerCase().includes(search.toLowerCase()))
+  //     .slice();
+  // // .reverse()
+  // // .slice(indexOFirstForm - 1, indexOfLastForm);
 
   const goToNextPage = () => {
-    setCurrentPage(currentPage + 1);
+    const prev = showForms.currentPage + 1;
+    setCurrentPage(prev <= showForms.totalPages ? prev : showForms.currentPage);
   };
 
   const goToPreviousPage = () => {
-    setCurrentPage(currentPage - 1);
+    const prev = showForms.currentPage - 1;
+    setCurrentPage(prev ? prev : showForms.currentPage);
   };
 
-  const pageNumbers = Math.ceil(showForms.length / formsPerPage);
+  // const pageNumbers = Math.ceil(showForms.length / formsPerPage);
 
   const navigate = useNavigate();
 
@@ -99,6 +98,14 @@ export function DisplayForms() {
 
   const Profile = () => {};
 
+  const formatDate = (dateString) => {
+    const dateObject = new Date(dateString);
+    const year = dateObject.getFullYear();
+    const month = (dateObject.getMonth() + 1).toString().padStart(2, "0");
+    const day = dateObject.getDate().toString().padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
   const [showMenu, setShowMenu] = useState(false);
   const handleMenuToggle = () => {
     setShowMenu(!showMenu);
@@ -106,13 +113,15 @@ export function DisplayForms() {
 
   const isAdmin = user.role === "admin";
 
+  console.log(showForms);
+
   // useEffect(() => {
   //   removeUser();
   // }, []);
 
   useEffect(() => {
     getPettyCashRequests();
-  }, [user]);
+  }, [currentPage, user, query]);
 
   useEffect(() => {
     if (!localStorage.getItem("user")) {
@@ -122,31 +131,41 @@ export function DisplayForms() {
 
   return (
     <>
-      <NavBar />
+      <NavBar setQuery={setQuery} query={query} showForms={showForms} />
 
       <div className="bg-gray-100 min-h-screen py-8">
         <div className="container mx-auto">
           <div className="flex justify-between items-center mb-4">
-            <h1 className="text-4xl font-bold mb-4">View Petty Cash Form</h1>
+            <h1 className="text-4xl font-bold mb-4">View Petty Cash Form </h1>
+            <div>
+              {" "}
+              {isLoading && (
+                <span className="animate animate-pulse text-gray-500">
+                  Loading...
+                </span>
+              )}
+            </div>
             <div className="sticky-container">
               <button
-                className="text-blue-500 hover:underline"
+                className="text-blue-500 hover:underline disabled:pointer-events-none disabled:text-blue-300"
+                disabled={isLoading}
                 onClick={goToPreviousPage}
-                disabled={currentPage === 1}
+                // disabled={currentPage === 1}
               >
                 Previous Page
               </button>
               <button
-                className="text-blue-500 hover:underline ml-2"
+                className="text-blue-500 hover:underline ml-2 disabled:pointer-events-none disabled:text-blue-300"
+                disabled={isLoading}
                 onClick={goToNextPage}
-                disabled={currentPage === pageNumbers}
+                // disabled={currentPage === pageNumbers}
               >
                 Next Page
               </button>
             </div>
           </div>
           <ul className="grid lg:grid-cols-3 gap-8  md:grid-cols-2 sm:grid-cols-1 sm:mx-12">
-            {currentForms.map((form, index) => (
+            {showForms.forms.map((form, index) => (
               <li
                 key={form._id}
                 className={`p-4 mb-4 ${
@@ -177,7 +196,9 @@ export function DisplayForms() {
                     </div>
 
                     <div className="flex items-center">
-                      <span className="text-gray-600">{`${form.date}`}</span>
+                      <span className="text-gray-600">
+                        {formatDate(form.createdAt)}
+                      </span>
                       <span className="ml-2 text-gray-500 text-sm truncate">{`(ID: ${truncateFormId(
                         form._id
                       )})`}</span>

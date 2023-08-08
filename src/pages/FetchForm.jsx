@@ -14,7 +14,7 @@ export default function FetchForm(props) {
   const getForm = async () => {
     try {
       const { data } = await axios.get(
-        `http://localhost:3000/get-request/${id}`
+        `${import.meta.env.VITE_API_BASE_URL}/get-request/${id}`
       );
 
       setForm({

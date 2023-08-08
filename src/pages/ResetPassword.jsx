@@ -19,13 +19,16 @@ const ResetPassword = () => {
   const handleEmailSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await fetch("http://localhost:3000/forgot-password", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email }),
-    });
+    const response = await fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/forgot-password`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      }
+    );
 
     const data = await response.json();
 
@@ -65,17 +68,20 @@ const ResetPassword = () => {
       return;
     }
 
-    const response = await fetch("http://localhost:3000/reset-password", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email,
-        code,
-        password: newPassword,
-      }),
-    });
+    const response = await fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/reset-password`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          code,
+          password: newPassword,
+        }),
+      }
+    );
     const data = await response.json();
 
     if (response.status === 200) {

@@ -1,10 +1,9 @@
 import axios from "axios";
-export const BASE_URL = "http://localhost:3000";
 export const httpClient = createClient();
 
 function createClient() {
   const client = axios.create({
-    baseURL: BASE_URL,
+    baseURL: import.meta.env.VITE_API_BASE_URL,
   });
   client.interceptors.request.use(handleBearerTokenInterceptor);
   return client;
