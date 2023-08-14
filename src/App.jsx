@@ -85,7 +85,7 @@ function App() {
       <NavBar />
       <div className="flex flex-col justify-center space-y-[1px] px-10">
         <div className=" items-center">
-          <h1 className="text-gray-800 text-lg font-medium">Overview</h1>
+          <h1 className="text-gray-800 text-2xl font-medium">Overview</h1>
         </div>
        
         <div className="grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 sm:place-self-center gap-7 py-4">
