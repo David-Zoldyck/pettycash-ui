@@ -11,8 +11,9 @@ import { getCurrentUser } from "./utils/currentUser.js";
 import { BsPersonFill } from "react-icons/bs";
 import { useContext } from "react";
 import { AuthContext } from "./pages/useContext/context.js";
-import Modal from "react-modal";
+// import Modal from "react-modal";
 import NavBar from "./components/NavBar.jsx";
+import { Modal } from "antd";
 import axios from "axios";
 import BarChart from "./components/BarChart.jsx";
 import DashboardStats from "./components/DashboardStats.jsx";
@@ -24,6 +25,8 @@ function App() {
   const [showModal, setShowModal] = useState(false);
   const [stats, setStats] = useState({});
   const [pending, setPending] = useState("");
+  const [report, setReport] = useState();
+  const [reportModal, setReportModal] = useState(false);
   const base_url = import.meta.env.VITE_API_BASE_URL;
   const navigate = useNavigate();
 
@@ -41,6 +44,10 @@ function App() {
     window.location.replace("/");
   };
 
+  // const handlePrintReceipt = () => {
+  //   httpClient.get(`${import.meta.env.VITE_API_BASE_URL}/print-receipt`, {});
+  // };
+
   const isAdmin = user.role === "admin";
 
   const isPending = stats.pendingForms > 0;
@@ -50,6 +57,45 @@ function App() {
       navigate("/");
     }
   });
+
+  const receipt = () => {
+    httpClient
+      .get("/report")
+      .then(({ data }) => {
+        setReport(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleReportModal = () => {
+    setReportModal(true);
+  };
+
+  const handleCancel = () => {
+    setReportModal(false);
+  };
+
+  const handlePrint = () => {
+    window.print();
+  };
+
+  const okProps = {
+    style: {
+      backgroundColor: "#E17F31",
+    },
+  };
+
+  const cancelProps = {
+    style: {
+      backgroundColor: "white",
+    },
+  };
+
+  useEffect(() => {
+    receipt();
+  }, []);
 
   useEffect(() => {
     if (!localStorage.getItem("user")) {
@@ -135,6 +181,9 @@ function App() {
           <h1 className="text-5xl font-extrabold mb-4 text-orange-600">
             PettyCash App
           </h1>
+
+          <button onClick={handleReportModal}>Print receipt</button>
+
           {/* <BarChart
             totalForms={stats.totalForms}
             approvedForms={stats.approvedForms}
@@ -163,6 +212,18 @@ function App() {
           </Routes>
         </div>
       </div>
+      {reportModal && (
+        <Modal
+          open={reportModal}
+          onCancel={handleCancel}
+          onOk={handlePrint}
+          okButtonProps={okProps}
+          cancelButtonProps={cancelProps}
+        >
+          {/* <div dangerouslySetInnerHTML={{ __html: report }}></div> */}
+          <iframe srcDoc={report} className="w-[450px] h-[450px]"></iframe>
+        </Modal>
+      )}
     </>
   );
 }
