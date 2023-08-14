@@ -1,22 +1,17 @@
 import { useState } from "react";
 import PetiCashForm from "./components/form.jsx";
 import Display from "./components/displaypage/display.jsx";
-import { Link, Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { Home } from "./pages/Home.jsx";
 import logo from "../src/components/assets/Cyberbytelogo.jpeg";
 import httpClient from "./hooks/server.js";
-import { useUser } from "./hooks/useUser.js";
+
 import { useEffect } from "react";
-import { getCurrentUser } from "./utils/currentUser.js";
-import { BsPersonFill } from "react-icons/bs";
+
 import { useContext } from "react";
 import { AuthContext } from "./pages/useContext/context.js";
 // import Modal from "react-modal";
 import NavBar from "./components/NavBar.jsx";
-import { Modal } from "antd";
-import axios from "axios";
-import BarChart from "./components/BarChart.jsx";
-import DashboardStats from "./components/DashboardStats.jsx";
 
 function App() {
   // const { user } = useUser();
@@ -29,20 +24,6 @@ function App() {
   const [reportModal, setReportModal] = useState(false);
   const base_url = import.meta.env.VITE_API_BASE_URL;
   const navigate = useNavigate();
-
-  const handleMenuToggle = () => {
-    setShowMenu(!showMenu);
-  };
-
-  const handleModal = () => {
-    setShowModal(true);
-  };
-
-  const removeUser = () => {
-    setShowModal(false);
-    window.localStorage.clear();
-    window.location.replace("/");
-  };
 
   // const handlePrintReceipt = () => {
   //   httpClient.get(`${import.meta.env.VITE_API_BASE_URL}/print-receipt`, {});
@@ -71,27 +52,7 @@ function App() {
 
   const handleReportModal = () => {
     setReportModal(true);
-  };
-
-  const handleCancel = () => {
-    setReportModal(false);
-  };
-
-  const handlePrint = () => {
-    window.print();
-  };
-
-  const okProps = {
-    style: {
-      backgroundColor: "#E17F31",
-    },
-  };
-
-  const cancelProps = {
-    style: {
-      backgroundColor: "white",
-    },
-  };
+  }
 
   useEffect(() => {
     receipt();
@@ -120,14 +81,13 @@ function App() {
   }, [user]);
 
   return (
-    <>
+    <div className="h-screen">
       <NavBar />
       <div className="flex flex-col justify-center space-y-[1px] px-10">
         <div className=" items-center">
           <h1 className="text-gray-800 text-lg font-medium">Overview</h1>
         </div>
-        {/* className="flex flex-row space-x-7 justify-center gap-3 py-4 divide-y
-        divide-orange-200" */}
+       
         <div className="grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 sm:place-self-center gap-7 py-4">
           {/* <div className="grid grid-cols gap-3 py-4 divide-y divide-orange-200"> */}
           <div className="shadow cursor-pointer shadow-orange-200 hover:shadow-md hover:shadow-orange-300 rounded bg-white p-7 w-64">
@@ -174,7 +134,7 @@ function App() {
           )}
         </div>
       </div>
-      <div className="bg-white flex items-center justify-center p-16">
+      <div className="bg-white flex items-center justify-center h-5/6">
         <div className="text-center">
           <img src={logo} alt="logo" className="mx-auto w-48" />
 
@@ -184,47 +144,23 @@ function App() {
 
           <button onClick={handleReportModal}>Print receipt</button>
 
-          {/* <BarChart
-            totalForms={stats.totalForms}
-            approvedForms={stats.approvedForms}
-            rejectedForms={stats.rejectedForms}
-          /> */}
-          {/* <div className="grid grid-cols-4 gap-6">
-            <DashboardStats forms={stats.totalForms} title="Total Forms" />
-            <DashboardStats
-              forms={stats.approvedForms}
-              title="Approved Forms"
-            />
-            <DashboardStats
-              forms={stats.rejectedForms}
-              title="Rejected Forms"
-            />
-            <DashboardStats forms={stats.pendingForms} title="Pending Forms" />
-          </div> */}
-          {/* <div>
-            <h2>Total forms: {stats.totalForms}</h2>
-            <h2>Approved forms: {stats.approvedForms}</h2>
-            <h2>Rejected forms: {stats.rejectedForms}</h2>
-            <h2>Pending forms: {stats.pendingForms}</h2>
-          </div> */}
           <Routes>
             <Route path="/" element={<Home />} />
           </Routes>
         </div>
       </div>
       {reportModal && (
-        <Modal
-          open={reportModal}
-          onCancel={handleCancel}
-          onOk={handlePrint}
-          okButtonProps={okProps}
-          cancelButtonProps={cancelProps}
+        <div
+          className="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-opacity-50 backdrop-filter backdrop-blur-sm"
+          onClick={() => setReportModal(false)}
         >
-          {/* <div dangerouslySetInnerHTML={{ __html: report }}></div> */}
-          <iframe srcDoc={report} className="w-[450px] h-[450px]"></iframe>
-        </Modal>
+          <div className="modal bg-white p-6 rounded-lg shadow-lg w-[550px] h-[600px]">
+            <iframe srcDoc={report} className="w-full h-full"></iframe>
+
+          </div>
+        </div>
       )}
-    </>
+    </div>
   );
 }
 

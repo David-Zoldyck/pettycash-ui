@@ -1,9 +1,9 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext } from "react";
 import { AuthContext, SearchContext } from "../pages/useContext/context";
 import { useLocation } from "react-router-dom";
-import { Link, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import { BsPersonFill } from "react-icons/bs";
-import httpClient from "../hooks/server";
+
 
 const NavBar = ({ setQuery, showForms, query }) => {
   const { user } = useContext(AuthContext);
@@ -85,42 +85,49 @@ const NavBar = ({ setQuery, showForms, query }) => {
 
   return (
     <>
-      <nav className="w-screen h-12 sticky top-0 bg-orange-600">
-        <div className="container h-full mx-auto px-4">
-          <ul className="flex flex-row items-center space-x- text-center h-12 justify-between">
-            <div className="flex flex-row space-x-12">
-              <li className="text-white hover:bg-orange-200 hover:text-black font-semibold w-16 h-12 flex items-center px-[9px] transition duration-300 hover:cursor-pointer">
-                <div
-                  onClick={() => {
-                    navigate("/home");
-                  }}
-                >
-                  Home
-                </div>
-              </li>
-              {!isAdmin ? (
-                <li className="text-white hover:bg-orange-200 hover:text-black font-semibold w-28 h-12 flex items-center px-[9px] transition duration-300 hover:cursor-pointer">
+      <nav className="w-full h-12 sticky top-0 bg-orange-600">
+        <div className="h-full mx-auto px-4 w-full">
+          <ul className="flex flex-row items-center text-center h-full justify-between">
+            <div className="flex flex-row space-x-[300px]">
+              <span className="flex items-center font-bold text-white font-custom">
+              {/* <img src={logo} alt="logo" className="mx-auto w-48" /> */}
+                Cyberbyte
+              </span>
+              <div className="flex flex-row space-x-12">
+                <li className="text-white font-custom hover:bg-orange-200 hover:text-black font-semibold w-16 h-12 flex items-center px-[9px] transition duration-300 hover:cursor-pointer">
                   <div
                     onClick={() => {
-                      navigate("/home/create-request");
+                      navigate("/home");
                     }}
                   >
-                    Submit Form
+                    Home
                   </div>
                 </li>
-              ) : null}
+                {!isAdmin ? (
+                  <li className="text-white hover:bg-orange-200 hover:text-black font-semibold font-custom w-28 h-12 flex items-center px-[9px] transition duration-300 hover:cursor-pointer">
+                    <div
+                      onClick={() => {
+                        navigate("/home/create-request");
+                      }}
+                    >
+                      Submit Form
+                    </div>
+                  </li>
+                ) : null}
 
-              <li className="text-white hover:bg-orange-200 hover:text-gray-900 font-semibold w-28 h-12 flex items-center px-[9px] transition duration-300 hover:cursor-pointer">
-                <div
-                  onClick={() => {
-                    navigate("/home/show-requests");
-                  }}
-                >
-                  View Forms
-                </div>
-              </li>
+                <li className="text-white hover:bg-orange-200 hover:text-gray-900 font-semibold w-28 h-12 flex items-center px-[9px] transition duration-300 hover:cursor-pointer">
+                  <div
+                    onClick={() => {
+                      navigate("/home/show-requests");
+                    }}
+                  >
+                    View Forms
+                  </div>
+                </li>
+              </div>
             </div>
-            {showSearchBox && (
+            <div className="flex flex-row ">
+              {showSearchBox && (
               <input
                 className="h-8 my-2 rounded-lg placeholder:pl-1 shadow-lg border-2 border-gray-300 focus:ring-2 focus:ring-orange-600 focus:outline-none placeholder:after:pl-3"
                 type="text"
@@ -130,7 +137,7 @@ const NavBar = ({ setQuery, showForms, query }) => {
               />
             )}
 
-            <div className="relative">
+            <div className="">
               <div
                 onClick={handleMenuToggle}
                 className={`flex items-center justify-between px-4 py-3 rounded-lg cursor-pointer select-none ${
@@ -142,7 +149,7 @@ const NavBar = ({ setQuery, showForms, query }) => {
               >
                 <div className="flex items-center space-x-2">
                   <BsPersonFill className="w-7 h-7 text-white" />
-                  <span className="text-white font-semibold hover:text-black">
+                  <span className="text-white font-semibold hover:text-black font-custom">
                     {user?.username}
                   </span>
                 </div>
@@ -202,6 +209,7 @@ const NavBar = ({ setQuery, showForms, query }) => {
                   </div>
                 </div>
               )}
+            </div>
             </div>
           </ul>
         </div>
