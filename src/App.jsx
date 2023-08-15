@@ -52,7 +52,7 @@ function App() {
 
   const handleReportModal = () => {
     setReportModal(true);
-  }
+  };
 
   useEffect(() => {
     receipt();
@@ -66,10 +66,7 @@ function App() {
   }, [user]);
 
   useEffect(() => {
-    const url =
-      user.role === "admin"
-        ? `${import.meta.env.VITE_API_BASE_URL}/stats`
-        : `${import.meta.env.VITE_API_BASE_URL}/user-stats`;
+    const url = user.role === "admin" ? `/stats` : `/user-stats`;
     httpClient
       .get(url)
       .then(({ data }) => {
@@ -87,7 +84,7 @@ function App() {
         <div className=" items-center">
           <h1 className="text-gray-800 text-2xl font-medium">Overview</h1>
         </div>
-       
+
         <div className="grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 sm:place-self-center gap-7 py-4">
           {/* <div className="grid grid-cols gap-3 py-4 divide-y divide-orange-200"> */}
           <div className="shadow cursor-pointer shadow-orange-200 hover:shadow-md hover:shadow-orange-300 rounded bg-white p-7 w-64">
@@ -156,7 +153,6 @@ function App() {
         >
           <div className="modal bg-white p-6 rounded-lg shadow-lg w-[550px] h-[600px]">
             <iframe srcDoc={report} className="w-full h-full"></iframe>
-
           </div>
         </div>
       )}
