@@ -6,6 +6,7 @@ import { useAuth } from "../hooks/useAuth";
 import { AuthContext, SearchContext } from "../pages/useContext/context.js";
 import httpClient from "../hooks/server";
 // import { BsPersonFill } from "react-icons/bs";
+import { SpinnerDotted } from "spinners-react";
 import NavBar from "../components/NavBar";
 
 export const calculateTotal = (form) => {
@@ -137,14 +138,7 @@ export function DisplayForms() {
         <div className="container mx-auto">
           <div className="flex justify-between items-center mb-4">
             <h1 className="text-4xl font-bold mb-4">View Petty Cash Form </h1>
-            <div>
-              {" "}
-              {isLoading && (
-                <span className="animate animate-pulse text-gray-500">
-                  Loading...
-                </span>
-              )}
-            </div>
+
             <div className="sticky-container">
               <button
                 className="text-blue-500 hover:underline disabled:pointer-events-none disabled:text-blue-300"
@@ -164,59 +158,68 @@ export function DisplayForms() {
               </button>
             </div>
           </div>
-          <ul className="grid lg:grid-cols-3 gap-8  md:grid-cols-2 sm:grid-cols-1 sm:mx-12">
-            {showForms.forms.map((form, index) => (
-              <li
-                key={form._id}
-                className={`p-4 mb-4 ${
-                  index % 2 === 0 ? "bg-white" : "bg-orange-100"
-                } shadow-2xl rounded-lg`}
-                // onClick={() => handleFormClick(form)}
-              >
-                <div>
-                  <div>
-                    <div className="flex space-x-6">
-                      <div>
-                        <span>
-                          <strong className="capitalizes">{`${form.name}`}</strong>
-                        </span>
-                        <span> - APPLICATION FORM</span> <br />
-                      </div>
-                      <span
-                        className={`font-bold ${
-                          form.status === "approved"
-                            ? "text-green-500 font-semibold capitalize"
-                            : form.status === "rejected"
-                            ? "text-red-500 font-semibold capitalize"
-                            : "text-gray-500 font-semibold capitalize"
-                        }`}
-                      >
-                        {form.status}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center">
-                      <span className="text-gray-600">
-                        {formatDate(form.createdAt)}
-                      </span>
-                      <span className="ml-2 text-gray-500 text-sm truncate">{`(ID: ${truncateFormId(
-                        form._id
-                      )})`}</span>
-                    </div>
-                  </div>
-                  <div></div>
-                  <div
-                    onClick={() => {
-                      navigate(`/home/show-requests/${form._id}`);
-                    }}
-                    className="ml-2 text-blue-500 hover:underline hover:cursor-pointer"
+          <div className="relative">
+            {" "}
+            {isLoading ? (
+              <div className="flex items-center justify-center">
+                <SpinnerDotted size={100} color="#E17F31" />
+              </div>
+            ) : (
+              <ul className="grid lg:grid-cols-3 gap-8  md:grid-cols-2 sm:grid-cols-1 sm:mx-12">
+                {showForms.forms.map((form, index) => (
+                  <li
+                    key={form._id}
+                    className={`p-4 mb-4 ${
+                      index % 2 === 0 ? "bg-white" : "bg-orange-100"
+                    } shadow-2xl rounded-lg`}
+                    // onClick={() => handleFormClick(form)}
                   >
-                    View Details
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
+                    <div>
+                      <div>
+                        <div className="flex space-x-6">
+                          <div>
+                            <span>
+                              <strong className="capitalizes">{`${form.name}`}</strong>
+                            </span>
+                            <span> - APPLICATION FORM</span> <br />
+                          </div>
+                          <span
+                            className={`font-bold ${
+                              form.status === "approved"
+                                ? "text-green-500 font-semibold capitalize"
+                                : form.status === "rejected"
+                                ? "text-red-500 font-semibold capitalize"
+                                : "text-gray-500 font-semibold capitalize"
+                            }`}
+                          >
+                            {form.status}
+                          </span>
+                        </div>
+
+                        <div className="flex items-center">
+                          <span className="text-gray-600">
+                            {formatDate(form.createdAt)}
+                          </span>
+                          <span className="ml-2 text-gray-500 text-sm truncate">{`(ID: ${truncateFormId(
+                            form._id
+                          )})`}</span>
+                        </div>
+                      </div>
+                      <div></div>
+                      <div
+                        onClick={() => {
+                          navigate(`/home/show-requests/${form._id}`);
+                        }}
+                        className="ml-2 text-blue-500 hover:underline hover:cursor-pointer"
+                      >
+                        View Details
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
         {selectedForm && (
           <div className="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50">
