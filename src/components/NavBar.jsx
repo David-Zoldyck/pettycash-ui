@@ -14,8 +14,6 @@ const NavBar = ({ setQuery, showForms, query }) => {
   const [show, setShow] = useState(false)
   // setQuery(search)
   const navigate = useNavigate();
-  // const [searchForms, setSearchForms] = useState("");
-  // const [showForms, setShowForms] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const formsPerPage = 20;
   const location = useLocation();
@@ -87,17 +85,36 @@ const NavBar = ({ setQuery, showForms, query }) => {
 
   return (
     <>
-      <nav className="lg:w-full h-12 sticky top-0 bg-orange-600 min-w-fit">
-        {!show && <div className="md:hidden lg:hidden sm:block" onClick={()=>{setShow(true)}}>
-          <GiHamburgerMenu className="w-8 h-8 fill-white pt-1"/>
+      <nav className="lg:w-full h-12 sticky top-0 bg-orange-600 min-w-fit sm:flex sm:flex-row sm:space-x-[250px] sm:items-center">
+        {!show && <div className="md:hidden lg:hidden sm:block py-1" onClick={()=>{setShow(true)}}>
+          <GiHamburgerMenu className="w-8 h-8 fill-white pt-1 cursor-pointer"/>
         </div> }
         
-        {show && <div className="bg-transparent bg-gray-500 h-screen w-72">
-          <div className="flex justify-between">
-            <div></div>
-            <AiOutlineClose className="w-7 h-7 fill-white" onClick={()=>{setShow(false)}}/>
+        {show && (
+          <div className="fixed top-0 left-0 h-screen w-72 bg-gray-700 shadow-lg transform translate-x-0 transition-transform ease-in-out duration-300">
+            <div className="flex justify-between p-4">
+              <div>
+                <div>
+                  Home
+                </div>
+                <div>
+                  Submit Forms
+                </div>
+                <div>
+                  View Forms
+                </div>
+              </div>
+              <AiOutlineClose
+                className="w-7 h-7 fill-white cursor-pointer"
+                onClick={()=>{setShow(false)}}
+              />
+            </div>
           </div>
-          </div>}
+        )}
+
+        <div className="md:hidden lg:hidden sm:block ">
+          <span className="flex items-center font-bold text-white font-custom">CyberByte</span>
+        </div>
         
         <div className="h-full mx-auto px-4 w-full sm:hidden lg:block md:block">
           <ul className="flex flex-row items-center text-center h-full justify-between w-full">
