@@ -3,13 +3,15 @@ import { AuthContext, SearchContext } from "../pages/useContext/context";
 import { useLocation } from "react-router-dom";
 import {  useNavigate } from "react-router-dom";
 import { BsPersonFill } from "react-icons/bs";
-
+import { GiHamburgerMenu } from "react-icons/gi";
+import { AiOutlineClose} from "react-icons/ai";
 
 const NavBar = ({ setQuery, showForms, query }) => {
   const { user } = useContext(AuthContext);
   const [showMenu, setShowMenu] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const { search, setSearch } = useContext(SearchContext);
+  const [show, setShow] = useState(false)
   // setQuery(search)
   const navigate = useNavigate();
   // const [searchForms, setSearchForms] = useState("");
@@ -86,7 +88,18 @@ const NavBar = ({ setQuery, showForms, query }) => {
   return (
     <>
       <nav className="lg:w-full h-12 sticky top-0 bg-orange-600 min-w-fit">
-        <div className="h-full mx-auto px-4 w-full">
+        {!show && <div className="md:hidden lg:hidden sm:block" onClick={()=>{setShow(true)}}>
+          <GiHamburgerMenu className="w-8 h-8 fill-white pt-1"/>
+        </div> }
+        
+        {show && <div className="bg-transparent bg-gray-500 h-screen w-72">
+          <div className="flex justify-between">
+            <div></div>
+            <AiOutlineClose className="w-7 h-7 fill-white" onClick={()=>{setShow(false)}}/>
+          </div>
+          </div>}
+        
+        <div className="h-full mx-auto px-4 w-full sm:hidden lg:block md:block">
           <ul className="flex flex-row items-center text-center h-full justify-between w-full">
             <div className="flex flex-row space-x-[300px]">
               <span className="flex items-center font-bold text-white font-custom">
