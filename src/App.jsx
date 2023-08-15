@@ -1,13 +1,8 @@
-import { useState } from "react";
-import PetiCashForm from "./components/form.jsx";
-import Display from "./components/displaypage/display.jsx";
+import { useState, useEffect } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { Home } from "./pages/Home.jsx";
 import logo from "../src/components/assets/Cyberbytelogo.jpeg";
 import httpClient from "./hooks/server.js";
-
-import { useEffect } from "react";
-
 import { useContext } from "react";
 import { AuthContext } from "./pages/useContext/context.js";
 // import Modal from "react-modal";
@@ -16,13 +11,9 @@ import NavBar from "./components/NavBar.jsx";
 function App() {
   // const { user } = useUser();
   const { user } = useContext(AuthContext);
-  const [showMenu, setShowMenu] = useState(false);
-  const [showModal, setShowModal] = useState(false);
   const [stats, setStats] = useState({});
-  const [pending, setPending] = useState("");
   const [report, setReport] = useState();
   const [reportModal, setReportModal] = useState(false);
-  const base_url = import.meta.env.VITE_API_BASE_URL;
   const navigate = useNavigate();
 
   // const handlePrintReceipt = () => {

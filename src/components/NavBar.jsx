@@ -85,9 +85,9 @@ const NavBar = ({ setQuery, showForms, query }) => {
 
   return (
     <>
-      <nav className="w-full h-12 sticky top-0 bg-orange-600">
+      <nav className="lg:w-full h-12 sticky top-0 bg-orange-600 min-w-fit">
         <div className="h-full mx-auto px-4 w-full">
-          <ul className="flex flex-row items-center text-center h-full justify-between">
+          <ul className="flex flex-row items-center text-center h-full justify-between w-full">
             <div className="flex flex-row space-x-[300px]">
               <span className="flex items-center font-bold text-white font-custom">
               {/* <img src={logo} alt="logo" className="mx-auto w-48" /> */}
@@ -126,16 +126,18 @@ const NavBar = ({ setQuery, showForms, query }) => {
                 </li>
               </div>
             </div>
-            <div className="flex flex-row ">
-              {showSearchBox && (
-              <input
-                className="h-8 my-2 rounded-lg placeholder:pl-1 shadow-lg border-2 border-gray-300 focus:ring-2 focus:ring-orange-600 focus:outline-none placeholder:after:pl-3"
-                type="text"
-                placeholder="Search forms..."
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-              />
-            )}
+            <div className="flex flex-row w-full">
+              <div className="md:w-full">
+                {showSearchBox && (
+                <input
+                  className="h-8 my-2 rounded-lg placeholder:pl-1 shadow-lg border-2 border-gray-300 focus:ring-2 focus:ring-orange-600 focus:outline-none placeholder:after:pl-3"
+                  type="text"
+                  placeholder="Search forms..."
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                />
+              )}
+              </div>
 
             <div className="">
               <div
