@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { BsPersonFill } from "react-icons/bs";
 import NavBar from "../components/NavBar";
 import { toast } from "react-toastify";
+import httpClient from "../hooks/server";
 
 export default function ViewSubmittedRequest() {
   const { id } = useParams();
@@ -22,9 +23,10 @@ export default function ViewSubmittedRequest() {
 
   const getForm = async () => {
     try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_BASE_URL}/get-request/${id}`
-      );
+      // const response = await axios.get(
+      //   `${import.meta.env.VITE_API_BASE_URL}/get-request/${id}`
+      // );
+      const response = await httpClient.get(`/get-request/${id}`);
 
       setForm(response.data.data);
     } catch (error) {
@@ -134,7 +136,6 @@ export default function ViewSubmittedRequest() {
       alert("Failed to reject the request.");
     }
   };
-
 
   // const handleReject = async () => {
   //   try {

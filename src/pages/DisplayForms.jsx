@@ -42,6 +42,7 @@ export function DisplayForms() {
       .get(url)
       .then(({ data }) => {
         setShowForms(data);
+        console.log(data);
       })
       .catch((err) => {
         console.log("error: ", err);
@@ -156,11 +157,11 @@ export function DisplayForms() {
               </button>
             </div>
           </div>
-          <div className="relative">
+          <div className="flex justify-center items-center">
             {" "}
             {isLoading ? (
-              <div className="flex items-center justify-center">
-                <SpinnerDotted size={100} color="#E17F31" />
+              <div className="">
+                <SpinnerDotted size={100} color=" #BF4D00" />
               </div>
             ) : (
               <ul className="grid lg:grid-cols-3 gap-8  md:grid-cols-2 sm:grid-cols-1 sm:mx-12">
