@@ -6,6 +6,7 @@ import { BsPersonFill } from "react-icons/bs";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { AiOutlineClose } from "react-icons/ai";
 import httpClient from "../hooks/server.js";
+import { FiLogOut } from "react-icons/fi";
 
 const NavBar = ({ setQuery, showForms, query }) => {
   const { user } = useContext(AuthContext);
@@ -118,41 +119,46 @@ const NavBar = ({ setQuery, showForms, query }) => {
 
         {showSideBar && (
           <div className="fixed top-0 left-0 h-screen w-72 bg-gray-500 shadow-lg transform translate-x-0 transition-transform ease-in-out duration-300">
-            <div className="flex flex-col h-full">
-              <div className="flex items-center justify-between p-4">
-                <div className="text-white text-xl font-semibold">Menu</div>
-                <AiOutlineClose
-                  className="w-7 h-7 cursor-pointer fill-white"
-                  onClick={() => setShowSideBar(false)}
-                />
-              </div>
-              <div className="flex flex-col p-4 space-y-4">
-                <div className="space-y-2">
+            <div className="flex flex-col h-full justify-between pb-3">
+              <div className="space-y-16">
+                <div className="flex items-center justify-between p-4">
+                  <div className="text-white text-xl font-semibold">Menu</div>
+                  <AiOutlineClose
+                    className="w-7 h-7 cursor-pointer fill-white"
+                    onClick={() => setShowSideBar(false)}
+                  />
+                </div>
+                <div className="flex flex-col p-4 space-y-4">
+                <div className="space-y-8">
                   <div
-                    className="text-gray-300 hover:text-white cursor-pointer"
+                    className="text-gray-300 hover:text-white cursor-pointer text-2xl border-b-2"
                     onClick={() => navigate("/home")}
                   >
                     Home
                   </div>
                   {!isAdmin && (
                     <div
-                      className="text-gray-300 hover:text-white cursor-pointer"
+                      className="text-gray-300 hover:text-white cursor-pointer text-2xl border-b-2"
                       onClick={() => navigate("/home/create-request")}
                     >
                       Submit Form
                     </div>
                   )}
                   <div
-                    className="text-gray-300 hover:text-white cursor-pointer"
+                    className="text-gray-300 hover:text-white cursor-pointer text-2xl border-b-2"
                     onClick={() => navigate("/home/show-requests")}
                   >
                     View Forms
                   </div>
                 </div>
-                <div className="flex items-center text-white">
-                  <BsPersonFill className="w-7 h-7" />
-                  <span className="font-semibold">{user?.username}</span>
-                </div>
+                
+              </div>
+              </div>
+              
+              
+              <div className="flex items-center text-white justify-start ml-3 hover:text-white cursor-pointer" >
+                <FiLogOut className="w-7 h-7" />
+                <span className="font-semibold" onClick={handleModal}>Logout</span>
               </div>
             </div>
           </div>
