@@ -114,8 +114,6 @@ export function DisplayForms() {
 
   const isAdmin = user.role === "admin";
 
-  console.log(showForms);
-
   // useEffect(() => {
   //   removeUser();
   // }, []);
