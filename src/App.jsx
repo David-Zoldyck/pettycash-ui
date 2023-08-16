@@ -12,8 +12,7 @@ function App() {
   // const { user } = useUser();
   const { user } = useContext(AuthContext);
   const [stats, setStats] = useState({});
-  const [report, setReport] = useState();
-  const [reportModal, setReportModal] = useState(false);
+
   const navigate = useNavigate();
 
   // const handlePrintReceipt = () => {
@@ -29,25 +28,6 @@ function App() {
       navigate("/");
     }
   });
-
-  const receipt = () => {
-    httpClient
-      .get("/report")
-      .then(({ data }) => {
-        setReport(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const handleReportModal = () => {
-    setReportModal(true);
-  };
-
-  useEffect(() => {
-    receipt();
-  }, []);
 
   useEffect(() => {
     if (!localStorage.getItem("user")) {
@@ -130,23 +110,11 @@ function App() {
             PettyCash App
           </h1>
 
-          <button onClick={handleReportModal}>Print receipt</button>
-
           <Routes>
             <Route path="/" element={<Home />} />
           </Routes>
         </div>
       </div>
-      {reportModal && (
-        <div
-          className="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-opacity-50 backdrop-filter backdrop-blur-sm"
-          onClick={() => setReportModal(false)}
-        >
-          <div className="modal bg-white p-6 rounded-lg shadow-lg w-[550px] h-[600px]">
-            <iframe srcDoc={report} className="w-full h-full"></iframe>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
