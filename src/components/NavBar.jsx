@@ -47,8 +47,9 @@ const NavBar = ({ setQuery, showForms, query }) => {
   };
 
   const receipt = () => {
+    const url = user.role === "admin" ? `/report` : `/user-report`;
     httpClient
-      .get("/report")
+      .get(url)
       .then(({ data }) => {
         setReport(data);
       })
@@ -57,6 +58,7 @@ const NavBar = ({ setQuery, showForms, query }) => {
       });
   };
   const handleReportModal = () => {
+    receipt();
     setReportModal(true);
   };
 
@@ -99,9 +101,6 @@ const NavBar = ({ setQuery, showForms, query }) => {
   // useEffect(() => {
   //   getPettyCashRequests(search);
   // }, [search]);
-  useEffect(() => {
-    receipt();
-  }, []);
 
   return (
     <>
