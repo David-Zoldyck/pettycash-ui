@@ -7,6 +7,7 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { AiOutlineClose } from "react-icons/ai";
 import httpClient from "../hooks/server.js";
 import { FiLogOut } from "react-icons/fi";
+import { createPortal } from "react-dom";
 
 const NavBar = ({ setQuery, showForms, query }) => {
   const { user } = useContext(AuthContext);
@@ -37,7 +38,8 @@ const NavBar = ({ setQuery, showForms, query }) => {
     setShowMenu(!showMenu);
   };
 
-  const handleModal = () => {
+  const handleModal = (e) => {
+    e.preventDefault();
     setShowModal(true);
   };
 
@@ -129,36 +131,36 @@ const NavBar = ({ setQuery, showForms, query }) => {
                   />
                 </div>
                 <div className="flex flex-col p-4 space-y-4">
-                <div className="space-y-8">
-                  <div
-                    className="text-gray-300 hover:text-white cursor-pointer text-2xl border-b-2"
-                    onClick={() => navigate("/home")}
-                  >
-                    Home
-                  </div>
-                  {!isAdmin && (
+                  <div className="space-y-8">
                     <div
                       className="text-gray-300 hover:text-white cursor-pointer text-2xl border-b-2"
-                      onClick={() => navigate("/home/create-request")}
+                      onClick={() => navigate("/home")}
                     >
-                      Submit Form
+                      Home
                     </div>
-                  )}
-                  <div
-                    className="text-gray-300 hover:text-white cursor-pointer text-2xl border-b-2"
-                    onClick={() => navigate("/home/show-requests")}
-                  >
-                    View Forms
+                    {!isAdmin && (
+                      <div
+                        className="text-gray-300 hover:text-white cursor-pointer text-2xl border-b-2"
+                        onClick={() => navigate("/home/create-request")}
+                      >
+                        Submit Form
+                      </div>
+                    )}
+                    <div
+                      className="text-gray-300 hover:text-white cursor-pointer text-2xl border-b-2"
+                      onClick={() => navigate("/home/show-requests")}
+                    >
+                      View Forms
+                    </div>
                   </div>
                 </div>
-                
               </div>
-              </div>
-              
-              
-              <div className="flex items-center text-white justify-start ml-3 hover:text-white cursor-pointer" >
+
+              <div className="flex items-center text-white justify-start ml-3 hover:text-white cursor-pointer">
                 <FiLogOut className="w-7 h-7" />
-                <span className="font-semibold" onClick={handleModal}>Logout</span>
+                <span className="font-semibold" onClick={handleModal}>
+                  Logout
+                </span>
               </div>
             </div>
           </div>
@@ -275,32 +277,34 @@ const NavBar = ({ setQuery, showForms, query }) => {
                   </div>
                 ) : null}
 
-                {showModal && (
-                  <div
-                    className="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-opacity-50 backdrop-filter backdrop-blur-sm"
-                    onClick={() => setShowModal(false)}
-                  >
-                    <div className="modal bg-white p-6 rounded-lg shadow-lg">
-                      <h2 className="text-lg font-semibold mb-4">
-                        Are you sure you want to logout?
-                      </h2>
-                      <div className="flex space-x-4">
-                        <button
-                          className="confirm-btn flex-1 bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg"
-                          onClick={removeUser}
-                        >
-                          Confirm
-                        </button>
-                        <button
-                          className="confirm-btn flex-1 bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg"
-                          onClick={() => setShowModal(false)}
-                        >
-                          Cancel
-                        </button>
+                {showModal &&
+                  createPortal(
+                    <div
+                      className="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-opacity-50 backdrop-filter backdrop-blur-sm"
+                      onClick={() => setShowModal(false)}
+                    >
+                      <div className="modal bg-white p-6 rounded-lg shadow-lg">
+                        <h2 className="text-lg font-semibold mb-4">
+                          Are you sure you want to logout?
+                        </h2>
+                        <div className="flex space-x-4">
+                          <button
+                            className="confirm-btn flex-1 bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg"
+                            onClick={removeUser}
+                          >
+                            Confirm
+                          </button>
+                          <button
+                            className="confirm-btn flex-1 bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg"
+                            onClick={() => setShowModal(false)}
+                          >
+                            Cancel
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                )}
+                    </div>,
+                    document.body
+                  )}
                 {reportModal && (
                   <div
                     className="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-opacity-50 backdrop-filter backdrop-blur-sm"
