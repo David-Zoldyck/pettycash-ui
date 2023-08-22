@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import logo from "./assets/Cyberbytelogo.jpeg";
 import "./style.css";
 import axios from "axios";
+import { Upload } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
 
 export default function PetiCashForm({
   submit,
@@ -23,6 +25,16 @@ export default function PetiCashForm({
   const updateForm = (key, value) => {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
+
+  // const updateForm = (key, value) => {
+  //   const formData = new FormData();
+  //   formData.append(key, value);
+
+  //   setForm(formData);
+  // };
+
+  // const cloudinaryData = new FormData();
+  // formData.append("attachment", form.attachment);
 
   const addItem = () => {
     updateForm("items", [...form.items, itemForm]);
@@ -99,6 +111,7 @@ export default function PetiCashForm({
         onSubmit={handleFormSubmbit}
         onReset={() => setForm(initialState)}
       >
+        {console.log(form)}
         <div className="mb-4">
           <label className="font-bold text-orange-500">Name: </label>
           <input
@@ -182,6 +195,29 @@ export default function PetiCashForm({
             value={form.accountDetails.accountName}
             className="border border-gray-400 rounded p-2 w-full"
           />
+        </div>
+        <div>
+          {/* <input
+            type="file"
+            accept=".jpg, .jpeg, .png, .pdf"
+            onChange={(e) => updateForm("attachment", e.target.files)}
+            className="border border-gray-400 bg-blue-100 rounded p-2 w-full"
+          /> */}
+          <Upload
+            // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+            listType="picture"
+            // defaultFileList={[...formData.attachments]}
+            className="upload-list-inline"
+            accept="image/*"
+            onChange={(e) => {
+              setForm({ ...form, attachment: e.fileList });
+            }}
+          >
+            <button className="flex items-center gap-2" type="button">
+              <UploadOutlined />
+              Upload
+            </button>
+          </Upload>
         </div>
         <div className="mb-4">
           <h3 className="font-bold text-orange-500">

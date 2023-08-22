@@ -20,6 +20,7 @@ export function PettyCashForm() {
     },
     authorizedBy: "",
     items: [],
+    attachment: "",
   };
   const [form, setForm] = useState(initialState);
   const [itemForm, setItemForm] = useState({ name: "", amount: 0 });
@@ -36,20 +37,30 @@ export function PettyCashForm() {
 
   const onSubmit = async (data) => {
     // Calculate the total amount
+
     const total = data.items.reduce(
       (accumulator, item) => accumulator + parseInt(item.amount),
       0
     );
     setTotal(total);
 
+    console.log(data);
+
     // const response = await axios.post(
     //   "http://localhost:3000/create-request",
     //   { ...data, total }
     // );
+
+    // const formData = new FormData();
+    // for (const key in form) {
+    //   formData.append(key, form[key]);
+    // }
+
     httpClient
       .post("/create-request", {
         ...data,
         total,
+        // formData,
       })
       .then((res) => {
         setForm(res.data);
@@ -99,7 +110,6 @@ export function PettyCashForm() {
     </>
   );
 }
-
 
 // httpClient
 //   .post("/create-request", {
