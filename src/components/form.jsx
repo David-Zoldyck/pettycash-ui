@@ -196,29 +196,7 @@ export default function PetiCashForm({
             className="border border-gray-400 rounded p-2 w-full"
           />
         </div>
-        <div>
-          {/* <input
-            type="file"
-            accept=".jpg, .jpeg, .png, .pdf"
-            onChange={(e) => updateForm("attachment", e.target.files)}
-            className="border border-gray-400 bg-blue-100 rounded p-2 w-full"
-          /> */}
-          <Upload
-            // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-            listType="picture"
-            // defaultFileList={[...formData.attachments]}
-            className="upload-list-inline"
-            accept="image/*"
-            onChange={(e) => {
-              setForm({ ...form, attachment: e.fileList });
-            }}
-          >
-            <button className="flex items-center gap-2" type="button">
-              <UploadOutlined />
-              Upload
-            </button>
-          </Upload>
-        </div>
+
         <div className="mb-4">
           <h3 className="font-bold text-orange-500">
             Please enter the items you wish to get a petty cash for...🤑💵
@@ -301,6 +279,33 @@ export default function PetiCashForm({
             onChange={(e) => updateForm("authorizedBy", e.target.value)}
             className="border border-gray-400 rounded p-2 w-full"
           />
+        </div>
+
+        <div className="p-2">
+          {/* <input
+            type="file"
+            accept=".jpg, .jpeg, .png, .pdf"
+            onChange={(e) => updateForm("attachment", e.target.files)}
+            className="border border-gray-400 bg-blue-100 rounded p-2 w-full"
+          /> */}
+          <Upload
+            // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+            listType="picture"
+            // defaultFileList={[...formData.attachments]}
+            className="upload-list-inline"
+            accept="image/*"
+            onChange={(e) => {
+              setForm({ ...form, attachment: e.fileList });
+            }}
+          >
+            <button
+              className="flex items-center gap-2 font-bold text-orange-500"
+              type="button"
+            >
+              <UploadOutlined />
+              Upload Proof(Optional)
+            </button>
+          </Upload>
         </div>
         <div className="flex flex-row space-x-3">
           <button
