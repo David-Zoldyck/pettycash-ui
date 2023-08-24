@@ -8,6 +8,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import httpClient from "../hooks/server.js";
 import { FiLogOut } from "react-icons/fi";
 import { createPortal } from "react-dom";
+import { motion, AnimatePresence } from 'framer-motion';
 
 const NavBar = ({ setQuery, showForms, query }) => {
   const { user } = useContext(AuthContext);
@@ -60,7 +61,8 @@ const NavBar = ({ setQuery, showForms, query }) => {
         console.log(err);
       });
   };
-  const handleReportModal = () => {
+  const handleReportModal = (e) => {
+    e.preventDefault()
     receipt();
     setReportModal(true);
   };
@@ -115,56 +117,69 @@ const NavBar = ({ setQuery, showForms, query }) => {
               setShowSideBar(true);
             }}
           >
-            <GiHamburgerMenu className="w-8 h-8 fill-white pt-1 cursor-pointer" />
+            <GiHamburgerMenu className="w-9 h-9 ml-3 fill-white pt-1 cursor-pointer" />
           </div>
         )}
 
-        {showSideBar && (
-          <div className="fixed top-0 left-0 h-screen w-72 bg-gray-500 shadow-lg transform translate-x-0 transition-transform ease-in-out duration-300">
-            <div className="flex flex-col h-full justify-between pb-3">
-              <div className="space-y-16">
-                <div className="flex items-center justify-between p-4">
-                  <div className="text-white text-xl font-semibold">Menu</div>
-                  <AiOutlineClose
-                    className="w-7 h-7 cursor-pointer fill-white"
-                    onClick={() => setShowSideBar(false)}
-                  />
-                </div>
-                <div className="flex flex-col p-4 space-y-4">
-                  <div className="space-y-8">
-                    <div
-                      className="text-gray-300 hover:text-white cursor-pointer text-2xl border-b-2"
-                      onClick={() => navigate("/home")}
-                    >
-                      Home
-                    </div>
-                    {!isAdmin && (
+        <AnimatePresence>
+          {showSideBar && (
+            <motion.div
+              initial={{ x: '-100%' }}
+              animate={{ x: -5 }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+              className="fixed top-0 left-0 h-screen w-72 bg-gray-500 shadow-lg rounded-lg"
+            >
+              <div className="flex flex-col h-full justify-between pb-3">
+                <div className="space-y-16">
+                  <div className="flex items-center justify-between p-4">
+                    <div className="text-white text-xl font-semibold">Menu</div>
+                    <AiOutlineClose
+                      className="w-7 h-7 cursor-pointer fill-white"
+                      onClick={() => setShowSideBar(false)}
+                    />
+                  </div>
+                  <div className="flex flex-col p-4 space-y-4">
+                    <div className="space-y-8">
                       <div
                         className="text-gray-300 hover:text-white cursor-pointer text-2xl border-b-2"
-                        onClick={() => navigate("/home/create-request")}
+                        onClick={() => navigate("/home")}
                       >
-                        Submit Form
+                        Home
                       </div>
-                    )}
-                    <div
-                      className="text-gray-300 hover:text-white cursor-pointer text-2xl border-b-2"
-                      onClick={() => navigate("/home/show-requests")}
-                    >
-                      View Forms
+                      {!isAdmin && (
+                        <div
+                          className="text-gray-300 hover:text-white cursor-pointer text-2xl border-b-2"
+                          onClick={() => navigate("/home/create-request")}
+                        >
+                          Submit Form
+                        </div>
+                      )}
+                      <div
+                        className="text-gray-300 hover:text-white cursor-pointer text-2xl border-b-2"
+                        onClick={() => navigate("/home/show-requests")}
+                      >
+                        View Forms
+                      </div>
+                      <div
+                        className="text-gray-300 hover:text-white cursor-pointer text-2xl border-b-2"
+                        onClick={handleReportModal}
+                      >
+                        Export Report
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="flex items-center text-white justify-start ml-3 hover:text-white cursor-pointer">
-                <FiLogOut className="w-7 h-7" />
-                <span className="font-semibold" onClick={handleModal}>
-                  Logout
-                </span>
+                <div className="flex items-center text-white justify-start ml-3 hover:text-white cursor-pointer">
+                  <FiLogOut className="w-7 h-7" />
+                  <span className="font-semibold" onClick={handleModal}>
+                    Logout
+                  </span>
+                </div>
               </div>
-            </div>
-          </div>
-        )}
+            </motion.div>
+          )}
+        </AnimatePresence>
         <div className="md:hidden lg:hidden sm:block ">
           <span className="flex items-center font-bold text-white font-custom">
             CyberByte
