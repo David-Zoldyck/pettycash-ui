@@ -96,7 +96,7 @@ export default function PetiCashForm({
   }, []);
 
   return (
-    <>
+    <div className="sm:mx-5 sm:my-5">
       {/* <img src={logo} alt="logo" className="mx-auto w-48" /> */}
       {/* <h1 className="text-xl ">
         Fill in the required details
@@ -107,11 +107,11 @@ export default function PetiCashForm({
       </div> */}
       <p className="text-xl text-center italic">Basic Details</p>
       <form
-        className="max-w-lg mx-auto"
+        className="max-w-lg lg:mx-auto md:mx-auto"
         onSubmit={handleFormSubmbit}
         onReset={() => setForm(initialState)}
       >
-        {console.log(form)}
+        {/* {console.log(form)} */}
         <div className="mb-4">
           <label className="font-bold text-orange-500">Name: </label>
           <input
@@ -199,7 +199,7 @@ export default function PetiCashForm({
 
         <div className="mb-4">
           <h3 className="font-bold text-orange-500">
-            Please enter the items you wish to get a petty cash for...🤑💵
+            Please enter the items you wish to get a petty cash for...&#x1F604;&#x1F4B0;
           </h3>
           <div className="flex items-center">
             <input
@@ -322,6 +322,6 @@ export default function PetiCashForm({
           </button>
         </div>
       </form>
-    </>
+    </div>
   );
 }

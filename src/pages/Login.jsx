@@ -46,8 +46,8 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="max-w-md w-full bg-white p-6 rounded-lg shadow-md">
+    <div className="lg:min-h-screen md:min-h-screen flex items-center justify-center bg-gray-100 sm:max-h-screen">
+      <div className="max-w-md w-full bg-white px-6 rounded-lg shadow-md sm:py-20 sm:shadow-none sm:rounded-none sm:border-none">
         {error && <p className="text-red-500 mb-4">{error}</p>}
 
         <form onSubmit={handleSubmit}>

@@ -164,7 +164,7 @@ export function DisplayForms() {
                 <SpinnerDotted size={100} color=" #BF4D00" />
               </div>
             ) : (
-              <ul className="grid lg:grid-cols-3 gap-8  md:grid-cols-2 sm:grid-cols-1 sm:mx-12">
+              <ul className="grid lg:grid-cols-3 gap-8  md:grid-cols-2 sm:grid-cols-1 sm:mx-2">
                 {showForms.forms.map((form, index) => (
                   <li
                     key={form._id}

@@ -162,7 +162,7 @@ export default function ViewSubmittedRequest() {
   return (
     <>
       <NavBar />
-      <div className="border border-1 w-2/3 mx-auto my-5 rounded">
+      <div className="border border-1 w-2/3 mx-auto my-5 rounded sm:border-none sm:w-full sm:m-0">
         <header className="bg-orange-100">
           <img src={logo} alt="logo" className="mx-auto w-48" />
         </header>
