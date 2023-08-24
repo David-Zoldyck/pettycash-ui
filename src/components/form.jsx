@@ -199,7 +199,8 @@ export default function PetiCashForm({
 
         <div className="mb-4">
           <h3 className="font-bold text-orange-500">
-            Please enter the items you wish to get a petty cash for...&#x1F604;&#x1F4B0;
+            Please enter the items you wish to get a petty cash
+            for...&#x1F604;&#x1F4B0;
           </h3>
           <div className="flex items-center">
             <input
