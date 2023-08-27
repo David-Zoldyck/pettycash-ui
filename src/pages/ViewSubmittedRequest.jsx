@@ -199,6 +199,13 @@ export default function ViewSubmittedRequest() {
               <strong>Recipient Bank: </strong>
               {form.accountDetails?.bank}
             </p>
+            {form.imageUrl && (
+              <p>
+                <strong>Attachments: </strong>
+                <img src={form.imageUrl} alt="Attachment" />
+                {/* {form.accountDetails?.bank} */}
+              </p>
+            )}
           </div>
           <div className="mb-8">
             <h3 className="text-lg font-bold mb-2">Details/Items</h3>

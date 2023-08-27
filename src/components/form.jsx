@@ -97,6 +97,7 @@ export default function PetiCashForm({
 
   return (
     <div className="sm:mx-5 sm:my-5">
+      {console.log(form)}
       {/* <img src={logo} alt="logo" className="mx-auto w-48" /> */}
       {/* <h1 className="text-xl ">
         Fill in the required details
@@ -292,12 +293,21 @@ export default function PetiCashForm({
           <Upload
             // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
             listType="picture"
+            action={async (file) => {
+              console.log(file);
+              return "success";
+            }}
+            beforeUpload={(file, list) => {
+              console.log(file, list);
+              setForm({ ...form, attachment: list });
+              return false;
+            }}
+            onRemove={()=>{
+              setForm({...form, attachment: null})
+            }}
             // defaultFileList={[...formData.attachments]}
             className="upload-list-inline"
-            accept="image/*"
-            onChange={(e) => {
-              setForm({ ...form, attachment: e.fileList });
-            }}
+            accept="file/*"
           >
             <button
               className="flex items-center gap-2 font-bold text-orange-500"

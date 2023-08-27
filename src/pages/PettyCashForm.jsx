@@ -37,33 +37,35 @@ export function PettyCashForm() {
 
   const onSubmit = async (data) => {
     // Calculate the total amount
-
-    const total = data.items.reduce(
-      (accumulator, item) => accumulator + parseInt(item.amount),
-      0
+    console.log("payload", data);
+    const formData = new FormData();
+    Object.keys(data).forEach((key) => {
+      if (["items", "accountDetails", "attachment"].includes(key)) return;
+      let value = data[key];
+      formData.append(key, value);
+    });
+    formData.append(
+      "accountDetails[accountName]",
+      data.accountDetails.accountName
     );
+    formData.append("accountDetails[number]", data.accountDetails.number);
+    formData.append("accountDetails[bank_name]", data.accountDetails.bank_name);
+
+    const total = data.items.reduce((accumulator, item, index) => {
+      formData.append(`items[${index}][amount]`, item.amount);
+      formData.append(`items[${index}][name]`, item.name);
+      return accumulator + parseInt(item.amount);
+    }, 0);
+    formData.append("total", total);
     setTotal(total);
-
+    const attachment = data.attachment[0];
+    formData.append("attachment", attachment);
     console.log(data);
-
-    // const response = await axios.post(
-    //   "http://localhost:3000/create-request",
-    //   { ...data, total }
-    // );
-
-    // const formData = new FormData();
-    // for (const key in form) {
-    //   formData.append(key, form[key]);
-    // }
-
     httpClient
-      .post("/create-request", {
-        ...data,
-        total,
-        // formData,
-      })
+      .post("/create-request", formData)
       .then((res) => {
         setForm(res.data);
+        console.log(res.data);
         setShowForm(false);
       })
       .catch((err) => {

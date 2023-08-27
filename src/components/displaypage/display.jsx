@@ -11,7 +11,6 @@ export default function Display({ form, total, onReturn }) {
   };
 
   const { user } = useContext(AuthContext);
-  console.log(user.name);
 
   if (!form) {
     return <div>No form data to display</div>;
