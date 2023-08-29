@@ -60,7 +60,7 @@ function App() {
           {/* <div className="grid grid-cols gap-3 py-4 divide-y divide-orange-200"> */}
           <div className="shadow cursor-pointer shadow-orange-200 hover:shadow-md hover:shadow-orange-300 rounded bg-white p-7 w-64">
             <div className="text-center text-sm font-bold text-gray-600">
-              Total
+              Total Reqeusts
             </div>
             <div className="flex justify-center">
               <span className="text-4xl font-bold text-orange-600">
@@ -70,7 +70,7 @@ function App() {
           </div>
           <div className="shadow cursor-pointer shadow-orange-200 hover:shadow-md hover:shadow-orange-300 rounded bg-white p-7 w-64">
             <div className="text-center text-sm font-bold text-gray-600">
-              Approved
+              Approved Requests
             </div>
             <div className="flex justify-center">
               <span className="text-4xl font-bold text-orange-600">
@@ -80,7 +80,7 @@ function App() {
           </div>
           <div className="shadow cursor-pointer shadow-orange-200 hover:shadow-md hover:shadow-orange-300 rounded bg-white p-7 w-64">
             <div className="text-center text-sm font-bold text-gray-600">
-              Rejected
+              Rejected Requests
             </div>
             <div className="flex justify-center">
               <span className="text-4xl font-bold text-orange-600">
@@ -91,7 +91,7 @@ function App() {
           {isPending && (
             <div className="shadow cursor-pointer shadow-orange-200 hover:shadow-md hover:shadow-orange-300 rounded bg-white  p-7 w-64">
               <div className="text-center text-sm font-bold text-gray-600">
-                Pending
+                Pending Requests
               </div>
               <div className="flex justify-center">
                 <span className="text-4xl font-bold text-orange-600">
