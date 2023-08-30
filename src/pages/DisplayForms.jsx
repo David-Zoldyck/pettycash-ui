@@ -134,11 +134,13 @@ export function DisplayForms() {
       <NavBar setQuery={setQuery} query={query} showForms={showForms} />
 
       <div className="bg-gray-100 min-h-screen py-8">
-        <div className="container mx-auto">
+        <div className="container mx-auto block ">
           <div className="flex justify-between items-center mb-4">
-            <h1 className="text-4xl font-bold mb-4">View Petty Cash Form </h1>
+            <div>
+              <h1 className="text-4xl font-bold pl-16">View Petty Cash Form </h1>
+            </div>
 
-            <div className="sticky-container">
+            <div className="sticky-container pr-16">
               <button
                 className="text-blue-500 hover:underline disabled:pointer-events-none disabled:text-blue-300"
                 disabled={isLoading}
@@ -157,41 +159,41 @@ export function DisplayForms() {
               </button>
             </div>
           </div>
-          <div className="flex justify-center items-center">
+          <div className="flex justify-center items-center ">
             {" "}
             {isLoading ? (
               <div className="">
                 <SpinnerDotted size={100} color=" #BF4D00" />
               </div>
             ) : (
-              <ul className="grid lg:grid-cols-3 gap-8  md:grid-cols-2 sm:grid-cols-1 sm:mx-2">
+              <ul className="grid lg:grid-cols-4 gap-5  md:grid-cols-2 sm:grid-cols-1 sm:mx-2">
                 {showForms.forms.map((form, index) => (
                   <li
                     key={form._id}
-                    className={`p-4 mb-4 ${
-                      index % 2 === 0 ? "bg-white" : "bg-orange-100"
-                    } shadow-2xl rounded-lg`}
+                    className={`p-4 bg-white hover:shadow-2xl shadow border pointer:cursor rounded-lg`}
                     // onClick={() => handleFormClick(form)}
                   >
                     <div>
                       <div>
-                        <div className="flex space-x-6">
-                          <div>
-                            <span>
-                              <strong className="capitalizes">{`${form.name}`}</strong>
+                        <div className="flex justify-between space-x-6">
+                          <div
+                            className="overflow-hidden text-ellipsis"
+                            title={form.name}
+                          >
+                            <span className="capitalize w-full whitespace-nowrap text-gray-700  font-semibold">
+                              {`${form.name}`}
                             </span>
-                            <span> - APPLICATION FORM</span> <br />
                           </div>
                           <span
-                            className={`font-bold ${
+                            className={`font-semibold  w-1/4 text-xs ${
                               form.status === "approved"
-                                ? "text-green-500 font-semibold capitalize"
+                                ? "text-green-500 font-semibold"
                                 : form.status === "rejected"
-                                ? "text-red-500 font-semibold capitalize"
-                                : "text-gray-500 font-semibold capitalize"
+                                ? "text-red-500 font-semibold "
+                                : "text-gray-500 font-semibold"
                             }`}
                           >
-                            {form.status}
+                            {form.status.toUpperCase()}
                           </span>
                         </div>
 
@@ -209,7 +211,7 @@ export function DisplayForms() {
                         onClick={() => {
                           navigate(`/home/show-requests/${form._id}`);
                         }}
-                        className="ml-2 text-blue-500 hover:underline hover:cursor-pointer"
+                        className=" text-blue-500 hover:underline hover:cursor-pointer"
                       >
                         View Details
                       </div>

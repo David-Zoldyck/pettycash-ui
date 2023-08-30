@@ -17,6 +17,8 @@ export default function ViewSubmittedRequest() {
   const [showMenu, setShowMenu] = useState(false);
   const [approveModal, setApproveModal] = useState(false);
   const [rejectModal, setRejectModal] = useState(false);
+  const [rejectReason, setRejectReason] = useState("");
+  const [showRejectReasonInput, setShowRejectReasonInput] = useState(false);
 
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
@@ -35,6 +37,8 @@ export default function ViewSubmittedRequest() {
     }
   };
 
+  if (form.status === "rejected") {
+  }
   const formatCurrency = (value) => {
     return Intl.NumberFormat("en-NG", {
       style: "currency",
@@ -70,6 +74,7 @@ export default function ViewSubmittedRequest() {
 
   const isAdmin = user.role === "admin";
 
+  console.log(form);
   const handleApprove = async () => {
     const token = localStorage.getItem("user");
     try {
@@ -111,7 +116,9 @@ export default function ViewSubmittedRequest() {
           method: "PUT",
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
           },
+          body: JSON.stringify({ rejectReason }),
         }
       );
       if (res.status === "rejected") {
@@ -129,8 +136,16 @@ export default function ViewSubmittedRequest() {
         theme: "light",
       });
 
-      setForm((prevForm) => ({ ...prevForm, status: "rejected" }));
+      setForm((prevForm) => ({
+        ...prevForm,
+        status: "rejected",
+        rejectReason,
+      }));
       //maybe set message later
+
+      setShowRejectReasonInput(false);
+      setRejectReason("");
+      setRejectModal(false);
     } catch (error) {
       console.log(error);
       alert("Failed to reject the request.");
@@ -158,7 +173,6 @@ export default function ViewSubmittedRequest() {
       navigate("/");
     }
   });
-  console.log(form);
 
   return (
     <>
@@ -263,6 +277,12 @@ export default function ViewSubmittedRequest() {
                   <strong>Approved By: </strong>
                 </p>
               </div>
+              {form.status === "rejected" && form.rejectReason && (
+                <div className="mb-3">
+                  <h3 className="text-base font-bold mb-1">Rejection Reason</h3>
+                  <p>{form.rejectReason}</p>
+                </div>
+              )}
               {/* Approve Modal */}
               {approveModal && (
                 <div
@@ -296,20 +316,34 @@ export default function ViewSubmittedRequest() {
             </div>
 
             {/* Reject Modal */}
+            {/* <>
+              {showRejectReasonInput && (
+                
+              )}
+            </> */}
 
             {rejectModal && (
-              <div
-                className="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-opacity-50 backdrop-filter backdrop-blur-sm"
-                onClick={() => setRejectModal(false)}
-              >
-                <div className="modal bg-white p-6 rounded-lg shadow-lg">
-                  <h2 className="text-lg font-semibold mb-4">
-                    Are you sure you want to reject the request?
-                  </h2>
-                  <div className="flex space-x-4">
+              <div className="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-opacity-50 backdrop-filter backdrop-blur-sm">
+                <div className="modal border-black border-2 h-96 w-96 bg-white p-6 rounded-lg shadow-lg">
+                  <div className="mb-4 h-2/3">
+                    <label className="block font-semibold">
+                      Reason for Rejection:
+                    </label>
+                    <textarea
+                      placeholder="Type in here..."
+                      className="w-full border rounded p-2 h-full"
+                      value={rejectReason}
+                      onChange={(e) => setRejectReason(e.target.value)}
+                    ></textarea>
+                  </div>
+
+                  <div className="flex space-x-4 mt-16">
                     <button
                       className="confirm-btn flex-1 bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg"
                       onClick={() => {
+                        if (showRejectReasonInput) {
+                          setRejectReason("");
+                        }
                         setRejectModal(false);
                         handleReject();
                       }}
@@ -318,7 +352,12 @@ export default function ViewSubmittedRequest() {
                     </button>
                     <button
                       className="confirm-btn flex-1 bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg"
-                      onClick={() => setRejectModal(false)}
+                      onClick={() => {
+                        if (showRejectReasonInput) {
+                          setRejectReason("");
+                        }
+                        setRejectModal(false);
+                      }}
                     >
                       Cancel
                     </button>
