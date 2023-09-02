@@ -8,7 +8,31 @@ import { AiOutlineClose } from "react-icons/ai";
 import httpClient from "../hooks/server.js";
 import { FiLogOut } from "react-icons/fi";
 import { createPortal } from "react-dom";
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from "framer-motion";
+
+const dropdown = [
+  {
+    id: 1,
+    name: "All",
+    link: "",
+  },
+  {
+    id: 2,
+    name: "Pending",
+    link: "",
+  },
+  {
+    id: 3,
+    name: "Approved",
+    link: "",
+  },
+  {
+    id: 4,
+    name: "Rejected",
+    link: "",
+  },
+];
+//["All", "Pending", "Approved", "Rejected"]
 
 const NavBar = ({ setQuery, showForms, query }) => {
   const { user } = useContext(AuthContext);
@@ -18,6 +42,12 @@ const NavBar = ({ setQuery, showForms, query }) => {
   const [showSideBar, setShowSideBar] = useState(false);
   const [report, setReport] = useState();
   const [reportModal, setReportModal] = useState(false);
+  // const [reportStatus, setReportStatus] = useState("All");
+  const [showReportStatus, setShowReportStatus] = useState(false);
+  const [showReportStatusDropdown, setShowReportStatusDropdown] =
+    useState(false);
+  const [selectedReportStatus, setSelectedReportStatus] = useState("All");
+
   // setQuery(search)
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
@@ -50,8 +80,27 @@ const NavBar = ({ setQuery, showForms, query }) => {
     window.location.replace("/");
   };
 
-  const receipt = () => {
-    const url = user.role === "admin" ? `/report` : `/user-report`;
+  const handleReportStatusToggle = () => {
+    setShowReportStatus(!showReportStatus);
+  };
+
+  const handleReportStatusChange = (status) => {
+    setReportStatus(status);
+    setShowReportStatus(false);
+  };
+
+  const receipt = (status) => {
+    console.log(status);
+    let url;
+    if (status === "All") {
+      url = user.role === "admin" ? `/report-all` : `/user-report-all`;
+    } else {
+      url =
+        user.role === "admin"
+          ? `report/${status?.toLowerCase()}`
+          : `user-report/${status?.toLowerCase()}`;
+    }
+
     httpClient
       .get(url)
       .then(({ data }) => {
@@ -61,10 +110,14 @@ const NavBar = ({ setQuery, showForms, query }) => {
         console.log(err);
       });
   };
-  const handleReportModal = (e) => {
-    e.preventDefault()
-    receipt();
+  const handleReportModal = (status) => {
     setReportModal(true);
+    receipt(status);
+  };
+
+  const handleReportSelectionModal = (e) => {
+    e.preventDefault();
+    setShowReportStatusDropdown(!showReportStatusDropdown);
   };
 
   // let getPettyCashRequests;
@@ -124,9 +177,9 @@ const NavBar = ({ setQuery, showForms, query }) => {
         <AnimatePresence>
           {showSideBar && (
             <motion.div
-              initial={{ x: '-100%' }}
+              initial={{ x: "-100%" }}
               animate={{ x: -5 }}
-              transition={{ duration: 0.3, ease: 'easeInOut' }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
               className="fixed top-0 left-0 h-screen w-72 bg-gray-500 shadow-lg rounded-lg"
             >
               <div className="flex flex-col h-full justify-between pb-3">
@@ -239,7 +292,7 @@ const NavBar = ({ setQuery, showForms, query }) => {
                 )}
               </div>
 
-              <div className="">
+              <div>
                 <div
                   onClick={handleMenuToggle}
                   className={`flex items-center justify-between px-4 py-3 rounded-lg cursor-pointer select-none ${
@@ -283,11 +336,56 @@ const NavBar = ({ setQuery, showForms, query }) => {
                         Logout
                       </button>
                       <button
-                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-orange-200 hover:text-gray-900"
-                        onClick={handleReportModal}
+                        className="flex items-center justify-betweenblock w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-orange-200 hover:text-gray-900"
+                        onClick={handleReportSelectionModal}
+                        style={{ transition: "background-color 300ms" }}
                       >
-                        Export Report
+                        <span>Export Report</span>
+                        <div className="transform transition-transform">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className={`h-5 w-5 text-white ${
+                              showReportStatusDropdown ? "rotate-180" : ""
+                            }`}
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            aria-hidden="true"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M6.293 7.293a1 1 0 011.414 0L10 9.586l2.293-2.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </div>
                       </button>
+                      {showReportStatusDropdown && (
+                        <div className="absolute right-0 mt-2 w-48 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                          <div className="py-1">
+                            {dropdown.map(({ id, name, link }) => {
+                              return (
+                                <div
+                                  key={id}
+                                  onClick={() => handleReportModal(name)}
+                                >
+                                  {name}
+                                </div>
+                              );
+                              // <button
+                              //   key={status}
+                              //   className={`block w-full text-left px-4 py-2 text-sm ${
+                              //     selectedReportStatus === status
+                              //       ? "text-gray-900 bg-orange-200"
+                              //       : "text-gray-700 hover:bg-orange-200 hover:text-gray-900"
+                              //   }`}
+                              //   onClick={() => handleReportStatusChange(status)}
+                              // >
+                              //   {status}
+                              // </button>
+                            })}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 ) : null}

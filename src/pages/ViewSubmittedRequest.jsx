@@ -54,6 +54,7 @@ export default function ViewSubmittedRequest() {
     setShowMenu(!showMenu);
   };
 
+  console.log(id);
   const handleModal = () => {
     setShowModal(true);
   };
