@@ -105,7 +105,11 @@ export function DisplayForms() {
     const year = dateObject.getFullYear();
     const month = (dateObject.getMonth() + 1).toString().padStart(2, "0");
     const day = dateObject.getDate().toString().padStart(2, "0");
-    return `${year}-${month}-${day}`;
+    const hours = dateObject.getHours().toString().padStart(2,"0")
+    const minutes = dateObject.getMinutes().toString().padStart(2, "0")
+    const amOrPm = hours >= 12 ? "PM" : "AM"
+    const formattedHours = hours % 12 || 12
+    return `${formattedHours}:${minutes}${amOrPm}  ${month}-${day}-${year}`;
   };
 
   const [showMenu, setShowMenu] = useState(false);
@@ -197,7 +201,7 @@ export function DisplayForms() {
                           </span>
                         </div>
 
-                        <div className="flex items-center">
+                        <div className="flex items-center justify-between">
                           <span className="text-gray-600">
                             {formatDate(form.createdAt)}
                           </span>

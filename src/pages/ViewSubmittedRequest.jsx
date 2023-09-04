@@ -274,9 +274,9 @@ export default function ViewSubmittedRequest() {
                   <strong>Authorized By: </strong>
                   {form.authorizedBy}
                 </p>
-                <p>
+                {/* <p>
                   <strong>Approved By: </strong>
-                </p>
+                </p> */}
               </div>
               {form.status === "rejected" && form.rejectReason && (
                 <div className="mb-3">

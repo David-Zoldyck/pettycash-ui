@@ -99,9 +99,9 @@ export default function Display({ form, total, onReturn }) {
           <strong>Authorized By: </strong>
           {form.authorizedBy}
         </p>
-        <p>
+        {/* <p>
           <strong>Approved By: </strong>
-        </p>
+        </p> */}
         <div className="flex justify-between">
           <div>
             <button

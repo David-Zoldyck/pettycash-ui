@@ -26,6 +26,14 @@ export default function PetiCashForm({
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
+  const authorizedOptions = [
+    "Mr. Prosper Nweze",
+    "Mr. Ademola Lukman",
+    "Mr. Williams Asemota",
+    "Mrs. Hannah Emmanuel",
+    "Mr. Umeh Simon",
+  ];
+
   // const updateForm = (key, value) => {
   //   const formData = new FormData();
   //   formData.append(key, value);
@@ -293,12 +301,21 @@ export default function PetiCashForm({
         </div>
         <div className="mb-4">
           <label className="font-bold text-orange-500">Authorized By: </label>
-          <input
+          <select
             required
             value={form.authorizedBy}
             onChange={(e) => updateForm("authorizedBy", e.target.value)}
             className="border border-gray-400 rounded p-2 w-full"
-          />
+          >
+            <option value="" disabled hidden>
+              Select an option
+            </option>
+            {authorizedOptions.map((option, index) => (
+              <option value={option} key={index}>
+                {option}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="p-2">
