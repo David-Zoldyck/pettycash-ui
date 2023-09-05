@@ -37,7 +37,10 @@ export function DisplayForms() {
     const url =
       user.role === "admin"
         ? `/get-requests?page=${currentPage}&q=${query}`
+        : user.role === "superadmin"
+        ? "/get-approved-requests"
         : `/get-user-requests?page=${currentPage}&q=${query}`;
+
     await httpClient
       .get(url)
       .then(({ data }) => {
@@ -105,10 +108,10 @@ export function DisplayForms() {
     const year = dateObject.getFullYear();
     const month = (dateObject.getMonth() + 1).toString().padStart(2, "0");
     const day = dateObject.getDate().toString().padStart(2, "0");
-    const hours = dateObject.getHours().toString().padStart(2,"0")
-    const minutes = dateObject.getMinutes().toString().padStart(2, "0")
-    const amOrPm = hours >= 12 ? "PM" : "AM"
-    const formattedHours = hours % 12 || 12
+    const hours = dateObject.getHours().toString().padStart(2, "0");
+    const minutes = dateObject.getMinutes().toString().padStart(2, "0");
+    const amOrPm = hours >= 12 ? "PM" : "AM";
+    const formattedHours = hours % 12 || 12;
     return `${formattedHours}:${minutes}${amOrPm}  ${month}-${day}-${year}`;
   };
 
@@ -118,6 +121,8 @@ export function DisplayForms() {
   };
 
   const isAdmin = user.role === "admin";
+
+  console.log(user.role);
 
   // useEffect(() => {
   //   removeUser();
@@ -141,7 +146,9 @@ export function DisplayForms() {
         <div className="container mx-auto block ">
           <div className="flex justify-between items-center mb-4">
             <div>
-              <h1 className="text-4xl font-bold pl-16">View Petty Cash Form </h1>
+              <h1 className="text-4xl font-bold pl-16">
+                View Petty Cash Form{" "}
+              </h1>
             </div>
 
             <div className="sticky-container pr-16">
@@ -189,15 +196,27 @@ export function DisplayForms() {
                             </span>
                           </div>
                           <span
-                            className={`font-semibold  w-1/4 text-xs ${
-                              form.status === "approved"
+                            className={`font-semibold w-1/4 text-xs ${
+                              user.role === "superadmin"
+                                ? form.superadminstatus === "approved"
+                                  ? "text-green-500 font-semibold"
+                                  : form.superadminstatus === "rejected"
+                                  ? "text-red-500 font-semibold"
+                                  : "text-gray-500 font-semibold"
+                                : form.status === "approved"
                                 ? "text-green-500 font-semibold"
                                 : form.status === "rejected"
-                                ? "text-red-500 font-semibold "
+                                ? "text-red-500 font-semibold"
                                 : "text-gray-500 font-semibold"
                             }`}
                           >
-                            {form.status.toUpperCase()}
+                            {user.role === "user" &&
+                            form.superadminstatus === "approved" &&
+                            form.status === "approved"
+                              ? "DISBURSED"
+                              : user.role === "superadmin"
+                              ? form.superadminstatus.toUpperCase()
+                              : form.status.toUpperCase()}
                           </span>
                         </div>
 

@@ -19,6 +19,11 @@ export default function ViewSubmittedRequest() {
   const [rejectModal, setRejectModal] = useState(false);
   const [rejectReason, setRejectReason] = useState("");
   const [showRejectReasonInput, setShowRejectReasonInput] = useState(false);
+  const [rejectModalFinal, setRejectModalFinal] = useState(false);
+  const [rejectReasonFinal, setRejectReasonFinal] = useState("");
+  const [showRejectReasonInputFinal, setShowRejectReasonInputFinal] =
+    useState(false);
+  const [superadminApproveModal, setSuperadminApproveModal] = useState(false);
 
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
@@ -54,7 +59,10 @@ export default function ViewSubmittedRequest() {
     setShowMenu(!showMenu);
   };
 
-  console.log(id);
+  const handleSuperadminApproveModal = () => {
+    setSuperadminApproveModal(true);
+  };
+
   const handleModal = () => {
     setShowModal(true);
   };
@@ -74,6 +82,10 @@ export default function ViewSubmittedRequest() {
   };
 
   const isAdmin = user.role === "admin";
+
+  const isSuperAdmin = user.role === "superadmin";
+  const isSuperAdminStatusPending =
+    isSuperAdmin && form.superadminstatus === "pending";
 
   console.log(form);
   const handleApprove = async () => {
@@ -108,6 +120,7 @@ export default function ViewSubmittedRequest() {
       alert("Failed to approve the request.");
     }
   };
+
   const handleReject = async () => {
     const token = localStorage.getItem("user");
     try {
@@ -141,6 +154,84 @@ export default function ViewSubmittedRequest() {
         ...prevForm,
         status: "rejected",
         rejectReason,
+      }));
+      //maybe set message later
+
+      setShowRejectReasonInput(false);
+      setRejectReason("");
+      setRejectModal(false);
+    } catch (error) {
+      console.log(error);
+      alert("Failed to reject the request.");
+    }
+  };
+
+  const handleApproveFinal = async () => {
+    const token = localStorage.getItem("user");
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/request/${id}/approve-final`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (res.superadminstatus === "approved") {
+        alert("Status has been updated to 'approved'");
+      }
+      toast.success("Request has been approved", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      setForm((prevForm) => ({ ...prevForm, superadminstatus: "approved" }));
+      //maybe set message later
+    } catch (error) {
+      console.log(error);
+      alert("Failed to approve the request.");
+    }
+  };
+
+  const handleRejectFinal = async () => {
+    const token = localStorage.getItem("user");
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/request/${id}/reject-final`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ rejectReasonFinal }),
+        }
+      );
+      if (res.superadminstatus === "rejected") {
+        alert("Status has been updated to 'rejected'");
+      }
+
+      toast.error("Request has been rejected", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+
+      setForm((prevForm) => ({
+        ...prevForm,
+        superadminstatus: "rejected",
+        rejectReasonFinal,
       }));
       //maybe set message later
 
@@ -284,6 +375,16 @@ export default function ViewSubmittedRequest() {
                   <p>{form.rejectReason}</p>
                 </div>
               )}
+              {form.superadminstatus === "rejected" &&
+                form.rejectReasonFinal && (
+                  <div className="mb-3">
+                    <h3 className="text-base font-bold mb-1">
+                      Rejection Reason (Final)
+                    </h3>
+                    <p>{form.rejectReasonFinal}</p>
+                  </div>
+                )}
+
               {/* Approve Modal */}
               {approveModal && (
                 <div
@@ -394,6 +495,96 @@ export default function ViewSubmittedRequest() {
                   </button>
                 )}
               </div>
+              <div className="flex space-x-4">
+                {isSuperAdminStatusPending && (
+                  <button
+                    onClick={() => setSuperadminApproveModal(true)}
+                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded w-full sm:w-auto mt-4 sm:mt-0 print:hidden"
+                  >
+                    Approve (Superadmin)
+                  </button>
+                )}
+                {isSuperAdminStatusPending && (
+                  <button
+                    onClick={() => setRejectModalFinal(true)}
+                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded w-full sm:w-auto mt-4 sm:mt-0 print:hidden"
+                  >
+                    Reject (Superadmin)
+                  </button>
+                )}
+              </div>
+              {superadminApproveModal && (
+                <div
+                  className="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-opacity-50 backdrop-filter backdrop-blur-sm"
+                  onClick={() => setSuperadminApproveModal(false)}
+                >
+                  <div className="modal bg-white p-6 rounded-lg shadow-lg">
+                    <h2 className="text-lg font-semibold mb-4">
+                      Are you sure you want to approve the request (Superadmin)?
+                    </h2>
+                    <div className="flex space-x-4">
+                      <button
+                        className="confirm-btn flex-1 bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg"
+                        onClick={() => {
+                          handleApproveFinal();
+                          setSuperadminApproveModal(false);
+                        }}
+                      >
+                        Confirm
+                      </button>
+                      <button
+                        className="confirm-btn flex-1 bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg"
+                        onClick={() => setSuperadminApproveModal(false)}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+              {rejectModalFinal && (
+                <div className="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-opacity-50 backdrop-filter backdrop-blur-sm">
+                  <div className="modal border-black border-2 h-96 w-96 bg-white p-6 rounded-lg shadow-lg">
+                    <div className="mb-4 h-2/3">
+                      <label className="block font-semibold">
+                        Reason for Rejection (Final):
+                      </label>
+                      <textarea
+                        placeholder="Type in here..."
+                        className="w-full border rounded p-2 h-full"
+                        value={rejectReasonFinal}
+                        onChange={(e) => setRejectReasonFinal(e.target.value)}
+                      ></textarea>
+                    </div>
+
+                    <div className="flex space-x-4 mt-16">
+                      <button
+                        className="confirm-btn flex-1 bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg"
+                        onClick={() => {
+                          if (showRejectReasonInputFinal) {
+                            setRejectReasonFinal("");
+                          }
+                          setRejectModalFinal(false);
+                          handleRejectFinal();
+                        }}
+                      >
+                        Confirm
+                      </button>
+                      <button
+                        className="confirm-btn flex-1 bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg"
+                        onClick={() => {
+                          if (showRejectReasonInputFinal) {
+                            setRejectReasonFinal("");
+                          }
+                          setRejectModalFinal(false);
+                        }}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
