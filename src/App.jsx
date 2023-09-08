@@ -14,6 +14,8 @@ function App() {
   // const { user } = useUser();
   const { user } = useContext(AuthContext);
   const [stats, setStats] = useState({});
+    const [isLoading, setLoading] = useState(false);
+
   const [showForms, setShowForms] = useState({
     forms: [],
   });
@@ -22,19 +24,20 @@ function App() {
   const navigate = useNavigate();
 
   const getPendingRequests = async () => {
-    // setLoading(true);
+    setLoading(true);
     try {
       const url =
         user.role === "admin"
           ? "/get-pending-requests"
           : user.role === "superadmin"
-          ? "/get-approved-requests"
+          ? "/get-pending-requests-superadmin"
           : "/get-pending-requests-user";
       const response = await httpClient.get(url);
       setPendingRequests(response.data.forms);
     } catch (error) {
       console.error("Error fetching pending requests:", error);
     }
+      setLoading(false)
     // .finally(() => {
     //   setLoading(false);
     // });}
@@ -101,7 +104,7 @@ function App() {
 
       <div className="flex flex-col justify-center space-y-[1px] px-10">
         <div className=" items-center">
-          <h1 className="text-gray-800 text-2xl font-medium">Overview</h1>
+          <h1 className="text-gray-800 text-2xl font-medium">Dashboard</h1>
         </div>
 
         <div className="grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 sm:place-self-center gap-7 py-4">
@@ -163,60 +166,66 @@ function App() {
           <div>
             <h2 className="text-2xl font-bold mb-4 text-gray-800">
               Pending Requests
-            </h2>
-            <ul className="grid lg:grid-cols-4 gap-5  md:grid-cols-2 sm:grid-cols-1 sm:mx-2">
-              {pendingRequests.slice(0, 16).map((form) => (
-                <li
-                  key={form._id}
-                  className={`p-4 bg-white hover:shadow-2xl shadow border pointer:cursor rounded-lg`}
-                  // onClick={() => handleFormClick(form)}
-                >
-                  <div>
+            </h2>{" "}
+            {isLoading ? (
+              <div className="">
+                <SpinnerDotted size={100} color=" #BF4D00" />
+              </div>
+            ) : (
+              <ul className="grid lg:grid-cols-4 gap-5  md:grid-cols-2 sm:grid-cols-1 sm:mx-2">
+                {pendingRequests.slice(0, 16).map((form) => (
+                  <li
+                    key={form._id}
+                    className={`p-4 bg-white hover:shadow-2xl shadow border pointer:cursor rounded-lg`}
+                    // onClick={() => handleFormClick(form)}
+                  >
                     <div>
-                      <div className="flex justify-between space-x-6">
-                        <div
-                          className="overflow-hidden text-ellipsis"
-                          title={form.name}
-                        >
-                          <span className="capitalize w-full whitespace-nowrap text-gray-700  font-semibold">
-                            {`${form.name}`}
+                      <div>
+                        <div className="flex justify-between space-x-6">
+                          <div
+                            className="overflow-hidden text-ellipsis"
+                            title={form.name}
+                          >
+                            <span className="capitalize w-full whitespace-nowrap text-gray-700  font-semibold">
+                              {`${form.name}`}
+                            </span>
+                          </div>
+                          <span
+                            className={`font-semibold  w-1/4 text-xs ${
+                              form.status === "approved"
+                                ? "text-green-500 font-semibold"
+                                : form.status === "rejected"
+                                ? "text-red-500 font-semibold "
+                                : "text-gray-500 font-semibold"
+                            }`}
+                          >
+                            {form.status.toUpperCase()}
                           </span>
                         </div>
-                        <span
-                          className={`font-semibold  w-1/4 text-xs ${
-                            form.status === "approved"
-                              ? "text-green-500 font-semibold"
-                              : form.status === "rejected"
-                              ? "text-red-500 font-semibold "
-                              : "text-gray-500 font-semibold"
-                          }`}
-                        >
-                          {form.status.toUpperCase()}
-                        </span>
-                      </div>
 
-                      <div className="flex items-center justify-between">
-                        <span className="text-gray-600">
-                          {formatDate(form.createdAt)}
-                        </span>
-                        <span className="ml-2 text-gray-500 text-sm truncate">{`(ID: ${truncateFormId(
-                          form._id
-                        )})`}</span>
+                        <div className="flex items-center justify-between">
+                          <span className="text-gray-600">
+                            {formatDate(form.createdAt)}
+                          </span>
+                          <span className="ml-2 text-gray-500 text-sm truncate">{`(ID: ${truncateFormId(
+                            form._id
+                          )})`}</span>
+                        </div>
+                      </div>
+                      <div></div>
+                      <div
+                        onClick={() => {
+                          navigate(`/home/show-requests/${form._id}`);
+                        }}
+                        className=" text-blue-500 hover:underline hover:cursor-pointer pr-48"
+                      >
+                        View Details
                       </div>
                     </div>
-                    <div></div>
-                    <div
-                      onClick={() => {
-                        navigate(`/home/show-requests/${form._id}`);
-                      }}
-                      className=" text-blue-500 hover:underline hover:cursor-pointer pr-48"
-                    >
-                      View Details
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
           <div className="flex justify-end">
             <p>

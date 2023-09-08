@@ -38,7 +38,7 @@ export function DisplayForms() {
       user.role === "admin"
         ? `/get-requests?page=${currentPage}&q=${query}`
         : user.role === "superadmin"
-        ? "/get-approved-requests"
+        ? `/get-superadmin-requests?page=${currentPage}&q=${query}`
         : `/get-user-requests?page=${currentPage}&q=${query}`;
 
     await httpClient
@@ -214,6 +214,10 @@ export function DisplayForms() {
                             form.superadminstatus === "approved" &&
                             form.status === "approved"
                               ? "DISBURSED"
+                              : user.role === "user" &&
+                                form.status === "approved" &&
+                                form.superadminstatus === "rejected"
+                              ? "REJECTED"
                               : user.role === "superadmin"
                               ? form.superadminstatus.toUpperCase()
                               : form.status.toUpperCase()}

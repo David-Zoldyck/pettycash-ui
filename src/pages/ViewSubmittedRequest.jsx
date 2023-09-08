@@ -1,9 +1,8 @@
 import logo from "../components/assets/Cyberbytelogo.jpeg";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { useContext } from "react";
-import { AuthContext } from "./useContext/context";
+import { AuthContext, AuthorizerContext } from "./useContext/context";
 import { Link } from "react-router-dom";
 import { BsPersonFill } from "react-icons/bs";
 import NavBar from "../components/NavBar";
@@ -24,15 +23,13 @@ export default function ViewSubmittedRequest() {
   const [showRejectReasonInputFinal, setShowRejectReasonInputFinal] =
     useState(false);
   const [superadminApproveModal, setSuperadminApproveModal] = useState(false);
+  const { authorizers, setAuthorizers } = useContext(AuthorizerContext);
 
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
 
   const getForm = async () => {
     try {
-      // const response = await axios.get(
-      //   `${import.meta.env.VITE_API_BASE_URL}/get-request/${id}`
-      // );
       const response = await httpClient.get(`/get-request/${id}`);
 
       setForm(response.data.data);
@@ -41,6 +38,22 @@ export default function ViewSubmittedRequest() {
       alert("Failed to fetch request");
     }
   };
+
+  const getAuthorizers = async () => {
+    try {
+      const { data } = await httpClient.get("/get-authorizers");
+      setAuthorizers(data?.authorizers);
+    } catch (error) {
+      console.error("Error fetching authorizers:", error);
+    }
+  };
+
+  useEffect(() => {
+    getAuthorizers();
+  }, []);
+
+  // console.log(authorizers?.find(({ _id }) => _id === form.authorizedBy).name);
+  //console.log(authorizers.find((item) => item._id === form.authorizedBy)?.name);
 
   if (form.status === "rejected") {
   }
@@ -55,26 +68,6 @@ export default function ViewSubmittedRequest() {
     return <div>Petty Cash Request not found.</div>;
   }
 
-  const handleMenuToggle = () => {
-    setShowMenu(!showMenu);
-  };
-
-  const handleSuperadminApproveModal = () => {
-    setSuperadminApproveModal(true);
-  };
-
-  const handleModal = () => {
-    setShowModal(true);
-  };
-
-  const handleApproveModal = () => {
-    setApproveModal(true);
-  };
-
-  const handleRejectModal = () => {
-    setRejectModal(true);
-  };
-
   const removeUser = () => {
     setShowModal(false);
     window.localStorage.clear();
@@ -86,8 +79,6 @@ export default function ViewSubmittedRequest() {
   const isSuperAdmin = user.role === "superadmin";
   const isSuperAdminStatusPending =
     isSuperAdmin && form.superadminstatus === "pending";
-
-  console.log(form);
   const handleApprove = async () => {
     const token = localStorage.getItem("user");
     try {
@@ -363,7 +354,15 @@ export default function ViewSubmittedRequest() {
               <div className="flex space-x-44">
                 <p>
                   <strong>Authorized By: </strong>
-                  {form.authorizedBy}
+                  {/* {form.authorizedBy} */}
+                  {
+                    authorizers.find((item) => item._id === form.authorizedBy)
+                      ?.name
+                  }
+                  {/* {
+                    authorizers.filter(({ _id }) => _id === form.authorizedBy)
+                      ?.name
+                  } */}
                 </p>
                 {/* <p>
                   <strong>Approved By: </strong>

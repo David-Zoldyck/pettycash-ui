@@ -1,8 +1,13 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import logo from "../assets/Cyberbytelogo.jpeg";
-import { AuthContext } from "../../pages/useContext/context.js";
+import {
+  AuthContext,
+  AuthorizerContext,
+} from "../../pages/useContext/context.js";
+import httpClient from "../../hooks/server";
 
 export default function Display({ form, total, onReturn }) {
+  const { authorizers } = useContext(AuthorizerContext);
   const formatCurrency = (value) => {
     return Intl.NumberFormat("en-NG", {
       style: "currency",
@@ -15,6 +20,19 @@ export default function Display({ form, total, onReturn }) {
   if (!form) {
     return <div>No form data to display</div>;
   }
+
+  const getAuthorizers = async () => {
+    try {
+      const { data } = await httpClient.get("/get-authorizers");
+      setAuthorizers(data?.authorizers);
+    } catch (error) {
+      console.error("Error fetching authorizers:", error);
+    }
+  };
+
+  useEffect(() => {
+    getAuthorizers();
+  }, []);
 
   return (
     <div className="border border-1 w-2/3 mx-auto my-5 rounded sm:border-none sm:w-full sm:m-0">
@@ -97,7 +115,9 @@ export default function Display({ form, total, onReturn }) {
         </div>
         <p>
           <strong>Authorized By: </strong>
-          {form.authorizedBy}
+          {/* {form.authorizedBy} */}
+
+          {authorizers.find((item) => item._id === form.authorizedBy)?.name}
         </p>
         {/* <p>
           <strong>Approved By: </strong>

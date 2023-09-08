@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import logo from "./assets/Cyberbytelogo.jpeg";
 import "./style.css";
 import axios from "axios";
 import { Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
+import httpClient from "../hooks/server";
+import { AuthorizerContext } from "../pages/useContext/context";
 
 export default function PetiCashForm({
   submit,
@@ -13,6 +15,10 @@ export default function PetiCashForm({
   setItemForm,
 }) {
   const [loadingAccount, setLoadingAccount] = useState(false);
+  const { authorizers, setAuthorizers } = useContext(AuthorizerContext);
+
+  // const [selectedAuthorizer, setSelectedAuthorizer] = useState({});
+
   /**
    *
    * @param {FormDataEvent} event
@@ -73,6 +79,24 @@ export default function PetiCashForm({
     ).then((res) => res.json());
     setBanks(banks.data);
   };
+
+  const getAuthorizers = async () => {
+    try {
+      const { data } = await httpClient.get("/get-authorizers");
+      setAuthorizers(data?.authorizers);
+    } catch (error) {
+      console.error("Error fetching authorizers:", error);
+    }
+  };
+
+  const selectedAuthorizers = authorizers.map(({ _id, name }) => (
+    <option key={_id} value={_id}>
+      {name}
+    </option>
+  ));
+
+  //console.log(authorizers);
+
   const resolveAccount = async (bankCode, accountNumber) => {
     setLoadingAccount(true);
     const banks = await fetch(
@@ -99,8 +123,13 @@ export default function PetiCashForm({
       number: accountNumber,
     });
   };
+
   useEffect(() => {
     getBanks();
+  }, []);
+
+  useEffect(() => {
+    getAuthorizers();
   }, []);
 
   return (
@@ -304,17 +333,11 @@ export default function PetiCashForm({
           <select
             required
             value={form.authorizedBy}
-            onChange={(e) => updateForm("authorizedBy", e.target.value)}
+            onChange={(e) => setForm({ ...form, authorizedBy: e.target.value })}
             className="border border-gray-400 rounded p-2 w-full"
           >
-            <option value="" disabled hidden>
-              Select an option
-            </option>
-            {authorizedOptions.map((option, index) => (
-              <option value={option} key={index}>
-                {option}
-              </option>
-            ))}
+            <option value="">Select an option</option>
+            {selectedAuthorizers}
           </select>
         </div>
 

@@ -10,7 +10,11 @@ import CreateUser from "./pages/CreateUser.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx";
 import Login from "./pages/Login.jsx";
 import NotFound from "./pages/NotFound.jsx";
-import { AuthContext, SearchContext } from "./pages/useContext/context.js";
+import {
+  AuthContext,
+  AuthorizerContext,
+  SearchContext,
+} from "./pages/useContext/context.js";
 import { useState } from "react";
 import { useAuth } from "./hooks/useAuth.js";
 import { useUser } from "./hooks/useUser.js";
@@ -21,6 +25,7 @@ const Main = () => {
   // const { user, login: setUser } = useAuth();
   const { user } = useUser();
   const [search, setSearch] = useState("");
+  const [authorizers, setAuthorizers] = useState([]);
 
   const router = createBrowserRouter([
     {
@@ -76,7 +81,9 @@ const Main = () => {
       <>
         <AuthContext.Provider value={{ user }}>
           <SearchContext.Provider value={{ search, setSearch }}>
-            <RouterProvider router={router} />
+            <AuthorizerContext.Provider value={{ authorizers, setAuthorizers }}>
+              <RouterProvider router={router} />
+            </AuthorizerContext.Provider>
           </SearchContext.Provider>
         </AuthContext.Provider>
       </>

@@ -9,6 +9,7 @@ import httpClient from "../hooks/server.js";
 import { FiLogOut } from "react-icons/fi";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import logo from "../components/assets/Cyberbytelogo2.png";
 
 const dropdown = [
   {
@@ -93,10 +94,13 @@ const NavBar = ({ setQuery, showForms, query }) => {
     console.log(status);
     let url;
     if (status === "All") {
-      url = user.role === "admin" ? `/report-all` : `/user-report-all`;
+      url =
+        user.role === "admin" || "superadmin"
+          ? `/report-all`
+          : `/user-report-all`;
     } else {
       url =
-        user.role === "admin"
+        user.role === "admin" || "superadmin"
           ? `report/${status?.toLowerCase()}`
           : `user-report/${status?.toLowerCase()}`;
     }
@@ -153,8 +157,7 @@ const NavBar = ({ setQuery, showForms, query }) => {
   //       });
   //   };
   // }
-
-  const isAdmin = user.role === "admin";
+  const isAdmin = user.role === "admin" || user.role === "superadmin";
 
   // useEffect(() => {
   //   getPettyCashRequests(search);
@@ -241,9 +244,9 @@ const NavBar = ({ setQuery, showForms, query }) => {
 
         <div className="h-full mx-auto px-4 w-full sm:hidden lg:block md:block">
           <ul className="flex flex-row items-center text-center h-full justify-between w-full">
-            <div className="flex flex-row space-x-[300px]">
+            <div className="flex flex-row space-x-[100px]">
               <span className="flex items-center font-bold text-white font-custom">
-                {/* <img src={logo} alt="logo" className="mx-auto w-48" /> */}
+                <img src={logo} alt="logo" className="mx-auto w-32 h-6" />
                 Cyberbyte
               </span>
               <div className="flex flex-row space-x-12">

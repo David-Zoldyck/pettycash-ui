@@ -5,4 +5,6 @@ export const AuthContext = createContext({
   setUser: () => {},
 });
 
+export const AuthorizerContext = createContext();
+
 export const SearchContext = createContext();
