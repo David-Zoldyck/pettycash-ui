@@ -97,7 +97,7 @@ export function PettyCashForm() {
   return (
     <>
       <NavBar />
-      <div className="">
+      <div className="flex justify-center items-center mx-auto bg-gray-100">
         {showForm && (
           <PetiCashForm
             submit={onSubmit}
@@ -168,4 +168,3 @@ export function PettyCashForm() {
 //       });
 //     }
 //   });
-

@@ -1,11 +1,12 @@
 import { useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import logo from "./assets/Cyberbytelogo.jpeg";
 import "./style.css";
 import axios from "axios";
 import { Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import httpClient from "../hooks/server";
-import { AuthorizerContext } from "../pages/useContext/context";
+import { AuthorizerContext, AuthContext } from "../pages/useContext/context";
 
 export default function PetiCashForm({
   submit,
@@ -16,7 +17,8 @@ export default function PetiCashForm({
 }) {
   const [loadingAccount, setLoadingAccount] = useState(false);
   const { authorizers, setAuthorizers } = useContext(AuthorizerContext);
-
+  const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
   // const [selectedAuthorizer, setSelectedAuthorizer] = useState({});
 
   /**
@@ -31,14 +33,6 @@ export default function PetiCashForm({
   const updateForm = (key, value) => {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
-
-  const authorizedOptions = [
-    "Mr. Prosper Nweze",
-    "Mr. Ademola Lukman",
-    "Mr. Williams Asemota",
-    "Mrs. Hannah Emmanuel",
-    "Mr. Umeh Simon",
-  ];
 
   // const updateForm = (key, value) => {
   //   const formData = new FormData();
@@ -132,17 +126,15 @@ export default function PetiCashForm({
     getAuthorizers();
   }, []);
 
+  useEffect(() => {
+    if (user.role !== "user") {
+      navigate("/home");
+    }
+  }, []);
+
   return (
-    <div className="sm:mx-5 sm:my-5">
-      {console.log(form)}
-      {/* <img src={logo} alt="logo" className="mx-auto w-48" /> */}
-      {/* <h1 className="text-xl ">
-        Fill in the required details
-      </h1> */}
-      {/* <p>{.stringify(form)}</p> */}
-      {/* <div className="relative top-0 bottom-0 right-0 left-0">
-        <p>TRIAL</p>
-      </div> */}
+    <div className="sm:mx-5 sm:my-5 p-5 shadow-xl rounded-lg bg-white">
+      <div></div>
       <p className="text-xl text-center italic">Basic Details</p>
       <form
         className="max-w-lg lg:mx-auto md:mx-auto"
@@ -272,7 +264,7 @@ export default function PetiCashForm({
               type="button"
               onClick={addItem}
             >
-              add ➕
+              ➕
             </button>
           </div>
           <div>
