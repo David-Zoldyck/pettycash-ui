@@ -14,7 +14,7 @@ function App() {
   // const { user } = useUser();
   const { user } = useContext(AuthContext);
   const [stats, setStats] = useState({});
-    const [isLoading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState(false);
 
   const [showForms, setShowForms] = useState({
     forms: [],
@@ -37,7 +37,7 @@ function App() {
     } catch (error) {
       console.error("Error fetching pending requests:", error);
     }
-      setLoading(false)
+    setLoading(false);
     // .finally(() => {
     //   setLoading(false);
     // });}
@@ -58,7 +58,7 @@ function App() {
     return `${formattedHours}:${minutes}${amOrPm}  ${month}-${day}-${year}`;
   };
 
-  const isAdmin = user.role === "admin";
+  const isAdmin = user?.role === "admin";
 
   const isPending = stats.pendingForms > 0;
 
@@ -87,7 +87,7 @@ function App() {
   }, [user]);
 
   useEffect(() => {
-    const url = user.role === "admin" ? `/stats` : `/user-stats`;
+    const url = user?.role === "admin" ? `/stats` : `/user-stats`;
     httpClient
       .get(url)
       .then(({ data }) => {
@@ -104,7 +104,7 @@ function App() {
 
       <div className="flex flex-col justify-center space-y-[1px] px-10">
         <div className=" items-center">
-          <h1 className="text-gray-800 text-2xl font-medium">Dashboard</h1>
+          <h1 className="text-gray-700 text-2xl font-medium pl-24">Dashboard</h1>
         </div>
 
         <div className="grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 sm:place-self-center gap-7 py-4">
@@ -164,7 +164,7 @@ function App() {
           </div>
 
           <div>
-            <h2 className="text-2xl font-bold mb-4 text-gray-800">
+            <h2 className="text-gray-700 text-2xl font-medium pb-3">
               Pending Requests
             </h2>{" "}
             {isLoading ? (
