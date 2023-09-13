@@ -143,11 +143,11 @@ export function DisplayForms() {
       <NavBar setQuery={setQuery} query={query} showForms={showForms} />
 
       <div className="bg-gray-100 min-h-screen py-8">
-        <div className="container mx-auto block ">
-          <div className="flex justify-between items-center mb-4">
+        <div className="container mx-auto block px-5">
+          <div className="flex justify-between items-center mb-4 border p-3 rounded-l bg-white shadow-lg w-full">
             <div>
-              <h1 className="text-4xl font-bold pl-16">
-                View Petty Cash Form{" "}
+              <h1 className=" text-2xl font-medium pl-1 text-gray-800">
+                View PettyCash Forms{" "}
               </h1>
             </div>
 
@@ -170,14 +170,14 @@ export function DisplayForms() {
               </button>
             </div>
           </div>
-          <div className="flex justify-center items-center ">
+          <div className="flex justify-center items-center w-full">
             {" "}
             {isLoading ? (
               <div className="">
                 <SpinnerDotted size={100} color=" #BF4D00" />
               </div>
             ) : (
-              <ul className="grid lg:grid-cols-4 gap-5  md:grid-cols-2 sm:grid-cols-1 sm:mx-2">
+              <ul className="grid lg:grid-cols-4 gap-5  md:grid-cols-2 sm:grid-cols-1 sm:mx-2 w-full">
                 {showForms.forms.map((form, index) => (
                   <li
                     key={form._id}
@@ -214,11 +214,11 @@ export function DisplayForms() {
                             form.superadminstatus === "approved" &&
                             form.status === "approved"
                               ? "DISBURSED"
-                              : user.role === "user" &&
-                                form.status === "approved" &&
-                                form.superadminstatus === "rejected"
-                              ? "REJECTED"
-                              : user.role === "superadmin"
+                              : // : user.role === "user" &&
+                              //   form.status === "approved" &&
+                              //   form.superadminstatus === "rejected"
+                              // ? "REJECTED"
+                              user.role === "superadmin"
                               ? form.superadminstatus.toUpperCase()
                               : form.status.toUpperCase()}
                           </span>

@@ -7,6 +7,7 @@ import { Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import httpClient from "../hooks/server";
 import { AuthorizerContext, AuthContext } from "../pages/useContext/context";
+import { BsTrash } from "react-icons/bs";
 
 export default function PetiCashForm({
   submit,
@@ -133,8 +134,7 @@ export default function PetiCashForm({
   }, []);
 
   return (
-    <div className="sm:mx-5 sm:my-5 p-5 shadow-xl rounded-lg bg-white">
-      <div></div>
+    <div className="sm:mx-5 sm:my-5 px-20 py-5 shadow-xl rounded-lg bg-white">
       <p className="text-xl text-center italic">Basic Details</p>
       <form
         className="max-w-lg lg:mx-auto md:mx-auto"
@@ -227,7 +227,7 @@ export default function PetiCashForm({
           />
         </div>
 
-        <div className="mb-4">
+        <div className="mb-4 w-full">
           <h3 className="font-bold text-orange-500">
             Please enter the items you wish to get a petty cash
             for...&#x1F604;&#x1F4B0;
@@ -267,19 +267,20 @@ export default function PetiCashForm({
               ➕
             </button>
           </div>
-          <div>
+          <div className="w-full">
             {form.items.length && (
               <>
-                <div className="flex-col text-center">
-                  <h3 className="font-bold">Items</h3>
+                <div className="flex-col text-center justify-center items-center space-y-3 w-full">
+                  <h3 className="font-bold mt-3">Items</h3>
                   <table className="w-full border">
                     <thead>
                       <tr className="border">
-                        <th className="px-4 py-2 border">S/N</th>
+                        <th className="py-2 border">S/N</th>
                         <th className="px-4 py-2 border">Details/Item Name</th>
                         <th className="px-4 py-2 border">Price</th>
-                        <th className="px-4 py-2 border">Quantity</th>
+                        <th className="py-2 border">Quantity</th>
                         <th className="px-4 py-2 border">Amount</th>
+                        <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -298,7 +299,7 @@ export default function PetiCashForm({
                               className="text-red-500 bg-transparent border-none"
                               onClick={() => removeItem(index)}
                             >
-                              Delete
+                              <BsTrash />
                             </button>
                           </td>
                         </tr>

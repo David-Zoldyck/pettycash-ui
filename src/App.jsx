@@ -104,7 +104,7 @@ function App() {
 
       <div className="flex flex-col justify-center space-y-[1px] px-10">
         <div className=" items-center">
-          <h1 className="text-gray-700 text-2xl font-medium pl-24">Dashboard</h1>
+          <h1 className="text-gray-700 text-2xl font-medium pl-24 pt-3">Dashboard</h1>
         </div>
 
         <div className="grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 sm:place-self-center gap-7 py-4">

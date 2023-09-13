@@ -80,6 +80,7 @@ const NavBar = ({ setQuery, showForms, query }) => {
 
   const handleMenuToggle = () => {
     setShowMenu(!showMenu);
+    setShowReportStatusDropdown(false);
   };
 
   const handleModal = (e) => {
@@ -411,10 +412,11 @@ const NavBar = ({ setQuery, showForms, query }) => {
                         </button>
                         {showReportStatusDropdown && (
                           <div className="absolute right-0 mt-2 w-48 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-                            <div className="py-1">
+                            <div className="py-1 hover:cursor-pointer flex flex-col justify-center items-center w-full">
                               {dropdown.map(({ id, name, link }) => {
                                 return (
                                   <div
+                                    className="hover:bg-orange-200 w-full text-center"
                                     key={id}
                                     onClick={() => handleReportModal(name)}
                                   >
