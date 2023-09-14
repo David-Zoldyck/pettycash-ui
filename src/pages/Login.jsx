@@ -6,6 +6,7 @@ import { useAuth } from "../hooks/useAuth";
 import axios from "axios";
 import httpClient from "../hooks/server";
 import { toast } from "react-toastify";
+import { BsEye, BsEyeSlash } from "react-icons/bs";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +14,7 @@ const Login = () => {
     password: "",
   });
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
 
@@ -25,11 +27,9 @@ const Login = () => {
       })
       .then((response) => {
         localStorage.setItem("user", response.data.token);
-        console.log(response);
         window.location.replace("/home");
       })
       .catch((err) => {
-        console.log(err.response.data.error);
         // const message = err?.response?.data?.error;
         // toast.error(message, {
         //   position: "top-right",
@@ -76,7 +76,7 @@ const Login = () => {
             />
           </div>
 
-          <div className="mb-4">
+          <div className="mb-4 relative">
             <label
               htmlFor="password"
               className="block text-gray-700 font-bold mb-2"
@@ -84,7 +84,7 @@ const Login = () => {
               Password:
             </label>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               id="password"
               name="password"
               value={formData?.password}
@@ -94,6 +94,13 @@ const Login = () => {
               required
               className="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:border-blue-500"
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute inset-y-0 top-7 right-0 pr-3 flex items-center"
+            >
+              {showPassword ? <BsEye /> : <BsEyeSlash />}
+            </button>
           </div>
           <div className="flex justify-end">
             <p>

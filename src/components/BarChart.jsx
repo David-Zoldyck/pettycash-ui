@@ -20,7 +20,6 @@ ChartJS.register(
 );
 
 function BarChart({ totalForms, approvedForms, rejectedForms }) {
-  console.log(totalForms);
   const options = {
     responsive: true,
     plugins: {

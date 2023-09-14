@@ -113,7 +113,6 @@ const NavBar = ({ setQuery, showForms, query }) => {
   };
 
   const receipt = (status) => {
-    console.log(status);
     let url;
     if (status === "All") {
       url =
@@ -133,7 +132,6 @@ const NavBar = ({ setQuery, showForms, query }) => {
         setReport(data);
       })
       .catch((err) => {
-        console.log(err);
       });
   };
   const handleReportModal = (status) => {

@@ -41,7 +41,6 @@ export function PettyCashForm() {
 
   const onSubmit = async (data) => {
     // Calculate the total amount
-    console.log("payload", data);
     const formData = new FormData();
     Object.keys(data).forEach((key) => {
       if (["items", "accountDetails", "attachment"].includes(key)) return;
@@ -66,12 +65,10 @@ export function PettyCashForm() {
     setTotal(total);
     const attachment = data.attachment[0];
     formData.append("attachment", attachment);
-    console.log(data);
     httpClient
       .post("/create-request", formData)
       .then((res) => {
         setForm(res.data);
-        console.log(res.data);
         setShowForm(false);
       })
       .catch((err) => {

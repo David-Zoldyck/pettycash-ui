@@ -345,11 +345,9 @@ export default function PetiCashForm({
             // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
             listType="picture"
             action={async (file) => {
-              console.log(file);
               return "success";
             }}
             beforeUpload={(file, list) => {
-              console.log(file, list);
               setForm({ ...form, attachment: list });
               return false;
             }}

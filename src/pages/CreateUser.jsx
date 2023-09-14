@@ -5,6 +5,7 @@ import logo from "../components/assets/Cyberbytelogo.jpeg";
 import { useContext } from "react";
 import httpClient from "../hooks/server";
 import { toast } from "react-toastify";
+import { BsEye, BsEyeSlash } from "react-icons/bs";
 
 const CreateUser = () => {
   const [formData, setFormData] = useState({
@@ -17,6 +18,8 @@ const CreateUser = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const navigate = useNavigate();
 
@@ -45,7 +48,6 @@ const CreateUser = () => {
         navigate("/home/login");
       })
       .catch((err) => {
-        console.log(err);
         toast.error("An Error has occured", {
           position: "top-right",
           autoClose: 3000,
@@ -111,7 +113,7 @@ const CreateUser = () => {
             />
           </div>
 
-          <div className="mb-4">
+          <div className="mb-4 relative">
             <label
               htmlFor="password"
               className="block text-gray-700 font-bold mb-2"
@@ -119,7 +121,7 @@ const CreateUser = () => {
               Password:
             </label>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               id="password"
               name="password"
               value={formData.password}
@@ -129,9 +131,16 @@ const CreateUser = () => {
               required
               className="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:border-blue-500"
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute inset-y-0 top-7 right-0 pr-3 flex items-center"
+            >
+              {showPassword ? <BsEye /> : <BsEyeSlash />}
+            </button>
           </div>
 
-          <div className="mb-4">
+          <div className="mb-4 relative">
             <label
               htmlFor="confirmPassword"
               className="block text-gray-700 font-bold mb-2"
@@ -139,7 +148,7 @@ const CreateUser = () => {
               Confirm Password:
             </label>
             <input
-              type="password"
+              type={showConfirmPassword ? "text" : "password"}
               id="confirmPassword"
               name="confirmPassword"
               value={formData.confirmPassword}
@@ -149,6 +158,13 @@ const CreateUser = () => {
               required
               className="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:border-blue-500"
             />
+            <button
+              type="button"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              className="absolute inset-y-0 top-7 right-0 pr-3 flex items-center"
+            >
+              {showConfirmPassword ? <BsEye /> : <BsEyeSlash />}
+            </button>
           </div>
 
           <button

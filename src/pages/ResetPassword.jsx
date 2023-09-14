@@ -4,6 +4,7 @@ import httpClient from "../hooks/server";
 import { json } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { BsEye, BsEyeSlash } from "react-icons/bs";
 
 const ResetPassword = () => {
   const [email, setEmail] = useState("");
@@ -13,6 +14,8 @@ const ResetPassword = () => {
   const [showCodeForm, setShowCodeForm] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const navigate = useNavigate();
 
@@ -151,29 +154,43 @@ const ResetPassword = () => {
                     onChange={(e) => setCode(e.target.value)}
                   />
                 </div>
-                <div className="mb-4">
+                <div className="mb-4 relative">
                   <label className="block text-gray-700 text-sm font-bold mb-2">
                     Enter new password:
                   </label>
                   <input
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     className="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:border-blue-500"
                     placeholder="New Password"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute inset-y-0 top-7 right-0 pr-3 flex items-center"
+                  >
+                    {showPassword ? <BsEye /> : <BsEyeSlash />}
+                  </button>
                 </div>
-                <div className="mb-4">
+                <div className="mb-4 relative">
                   <label className="block text-gray-700 text-sm font-bold mb-2">
                     Confirm new password:
                   </label>
                   <input
-                    type="password"
+                    type={showConfirmPassword ? "text" : "password"}
                     className="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:border-blue-500"
                     placeholder="Confirm Password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute inset-y-0 top-7 right-0 pr-3 flex items-center"
+                  >
+                    {showConfirmPassword ? <BsEye /> : <BsEyeSlash />}
+                  </button>
                 </div>
               </div>
             )}

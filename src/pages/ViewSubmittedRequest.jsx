@@ -8,6 +8,7 @@ import { BsPersonFill } from "react-icons/bs";
 import NavBar from "../components/NavBar";
 import { toast } from "react-toastify";
 import httpClient from "../hooks/server";
+import { ThumbNail } from "../components/Thumbnail";
 
 export default function ViewSubmittedRequest() {
   const { id } = useParams();
@@ -34,7 +35,6 @@ export default function ViewSubmittedRequest() {
 
       setForm(response.data.data);
     } catch (error) {
-      console.log(error);
       alert("Failed to fetch request");
     }
   };
@@ -107,7 +107,6 @@ export default function ViewSubmittedRequest() {
       setForm((prevForm) => ({ ...prevForm, status: "approved" }));
       //maybe set message later
     } catch (error) {
-      console.log(error);
       alert("Failed to approve the request.");
     }
   };
@@ -152,7 +151,6 @@ export default function ViewSubmittedRequest() {
       setRejectReason("");
       setRejectModal(false);
     } catch (error) {
-      console.log(error);
       alert("Failed to reject the request.");
     }
   };
@@ -185,7 +183,6 @@ export default function ViewSubmittedRequest() {
       setForm((prevForm) => ({ ...prevForm, superadminstatus: "approved" }));
       //maybe set message later
     } catch (error) {
-      console.log(error);
       alert("Failed to approve the request.");
     }
   };
@@ -230,7 +227,6 @@ export default function ViewSubmittedRequest() {
       setRejectReason("");
       setRejectModal(false);
     } catch (error) {
-      console.log(error);
       alert("Failed to reject the request.");
     }
   };
@@ -256,7 +252,6 @@ export default function ViewSubmittedRequest() {
       navigate("/");
     }
   });
-
   return (
     <>
       <NavBar />
@@ -294,16 +289,7 @@ export default function ViewSubmittedRequest() {
               <strong>Recipient Bank: </strong>
               {form.accountDetails?.bank}
             </p>
-            {form.imageUrl && (
-              <div>
-                <strong>Attachments: </strong>
-                <img
-                  src={form.imageUrl}
-                  alt="Attachment"
-                  className="max-w-full h-auto"
-                />
-              </div>
-            )}
+            {form.imageUrl && <ThumbNail imageUrl={form.imageUrl} />}
           </div>
           <div className="mb-3">
             <h3 className="text-base font-bold mb-1">Details/Items</h3>
@@ -355,14 +341,11 @@ export default function ViewSubmittedRequest() {
                 <p>
                   <strong>Authorized By: </strong>
                   {/* {form.authorizedBy} */}
+
                   {
                     authorizers.find((item) => item._id === form.authorizedBy)
                       ?.name
                   }
-                  {/* {
-                    authorizers.filter(({ _id }) => _id === form.authorizedBy)
-                      ?.name
-                  } */}
                 </p>
                 {/* <p>
                   <strong>Approved By: </strong>

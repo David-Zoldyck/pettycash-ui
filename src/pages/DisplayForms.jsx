@@ -45,10 +45,8 @@ export function DisplayForms() {
       .get(url)
       .then(({ data }) => {
         setShowForms(data);
-        console.log(data);
       })
       .catch((err) => {
-        console.log("error: ", err);
       })
       .finally(() => {
         setLoading(false);
@@ -122,7 +120,6 @@ export function DisplayForms() {
 
   const isAdmin = user.role === "admin";
 
-  console.log(user.role);
 
   // useEffect(() => {
   //   removeUser();
